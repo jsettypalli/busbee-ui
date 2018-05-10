@@ -1,0 +1,8 @@
+{
+  "name": "bus-bee",
+  "app_id": "76fdbaae",
+  "type": "ionic-angular",
+  "integrations": {
+    "cordova": {}
+  }
+}
