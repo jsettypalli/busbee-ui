@@ -20,4 +20,17 @@
     </ion-item>
 
     <button ion-button block outline color="secondary">Login using phone number</button>
+    <hr>
+    <ion-item>
+      <ion-label floating>User Name</ion-label>
+      <ion-input type="text" [(ngModel)]="user"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Password</ion-label>
+      <ion-input type="password" [(ngModel)]="password"></ion-input>
+    </ion-item>
+
+    <button ion-button block outline color="secondary" (click)="signIn()">Sign In</button>
+    <button ion-button block outline color="secondary" (click)="change()">Changep</button>
+
 </ion-content>
