@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage } from 'ionic-angular';
+import { IonicPage, AlertController } from 'ionic-angular';
 import { CongnitoProvider } from '../../providers/congnito/congnito';
 import { HomePage } from '../../pages/home/home';
 
@@ -12,7 +12,7 @@ export class LoginPage {
   public user;
   public password;
 
-  constructor(private congnitoProvider: CongnitoProvider) {
+  constructor(private congnitoProvider: CongnitoProvider, private alertCtrl: AlertController) {
 
   }
 
@@ -25,12 +25,22 @@ export class LoginPage {
   }
 
   signIn() {
-    this.congnitoProvider.signinUser(this.user, this.password, this.onSuccessfulLogin)
+    this.congnitoProvider.signinUser(this.user, this.password, this.onSuccessfulLogin, this.onFailedLogin)
   }
 
   onSuccessfulLogin() {
     localStorage.isLoggedIn = true;
     window.location.reload()
+  }
+
+  onFailedLogin() {
+    localStorage.isLoggedIn = undefined;
+    let alert = this.alertCtrl.create({
+      title: 'Login Error',
+      subTitle: 'The username or password is wrong. Please try again',
+      buttons: ['OK']
+    });
+    alert.present();
   }
 
 
