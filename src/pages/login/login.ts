@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { IonicPage } from 'ionic-angular';
 import { CongnitoProvider } from '../../providers/congnito/congnito';
+import { HomePage } from '../../pages/home/home';
 
 @Component({
   selector: 'page-login',
@@ -11,7 +12,7 @@ export class LoginPage {
   public user;
   public password;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private congnitoProvider: CongnitoProvider) {
+  constructor(private congnitoProvider: CongnitoProvider) {
 
   }
 
@@ -24,7 +25,12 @@ export class LoginPage {
   }
 
   signIn() {
-    this.congnitoProvider.signinUser(this.user, this.password, 'GetUrApp')
+    this.congnitoProvider.signinUser(this.user, this.password, this.onSuccessfulLogin)
+  }
+
+  onSuccessfulLogin() {
+    localStorage.isLoggedIn = true;
+    window.location.reload()
   }
 
 

@@ -75,7 +75,7 @@ export class CongnitoProvider {
     customChallenge: (challengeParameters: any) => { }
   };
 
-  signinUser(username: string, password: string, newPassword?: string, mfaCode?) {
+  signinUser(username: string, password: string, onSuccess) {
     const authData = {
       Username: username,
       Password: password
@@ -86,62 +86,10 @@ export class CongnitoProvider {
     this.cognitoUser.authenticateUser(authDetails, {
       onSuccess: (result) => {
         console.log('You are now Logged in');
+        onSuccess();
       },
       onFailure: (err) => {
         console.log('There was an error during login, please try again -> ', err)
-      },
-      newPasswordRequired: function(userAttributes, requiredAttributes) {
-        // User was signed up by an admin and must provide new
-        // password and required attributes, if any, to complete
-        // authentication.
-
-        // userAttributes: object, which is the user's current profile. It will list all attributes that are associated with the user.
-        // Required attributes according to schema, which don’t have any values yet, will have blank values.
-        // requiredAttributes: list of attributes that must be set by the user along with new password to complete the sign-in.
-
-
-        // Get these details and call
-        // newPassword: password that user has given
-        // attributesData: object with key as attribute name and value that the user has given.
-        let attributesData = {
-          email: userAttributes.email,
-          phone_number: userAttributes.phone_number
-        }
-        this.cognitoUser.completeNewPasswordChallenge(newPassword, attributesData, {
-          onSuccess: (session: CognitoUserSession) => {
-            console.log(session)
-          },
-          onFailure: (err: any) => {
-            console.log(err)
-          },
-          mfaRequired: (challengeName: any, challengeParameters: any) => {
-            console.log(challengeName)
-            console.log(challengeParameters)
-          },
-          customChallenge: (challengeParameters: any) => {
-            console.log(challengeParameters)
-          }
-        })
-      },
-      mfaRequired: function(codeDeliveryDetails) {
-        // MFA is required to complete user authentication.
-        // Get the code from user and call
-        this.cognitoUser.sendMFACode(mfaCode, this)
-      },
-      totpRequired: (challengeName: any, challengeParameters: any) => {
-        console.log(challengeName)
-        console.log(challengeParameters)
-      },
-      customChallenge: (challengeParameters: any) => {
-        console.log(challengeParameters)
-      },
-      mfaSetup: (challengeName: any, challengeParameters: any) => {
-        console.log(challengeName)
-        console.log(challengeParameters)
-      },
-      selectMFAType: (challengeName: any, challengeParameters: any) => {
-        console.log(challengeName)
-        console.log(challengeParameters)
       }
     })
   }

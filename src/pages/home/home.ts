@@ -9,7 +9,7 @@ export class HomePage implements AfterViewInit {
   MapmyIndia: any;
 
   constructor(public navCtrl: NavController) {
-    this.MapmyIndia = <any>window.MapmyIndia;
+    this.MapmyIndia = (<any>window).MapmyIndia;
   }
 
   ngAfterViewInit() {

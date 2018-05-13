@@ -35,7 +35,7 @@ export class MyApp {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
       if (localStorage.isLoggedIn == undefined) {
-        // this.nav.setRoot(LoginPage);
+        this.nav.setRoot(LoginPage);
       }
     });
   }
