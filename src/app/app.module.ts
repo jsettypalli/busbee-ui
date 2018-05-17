@@ -2,6 +2,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { Pro } from '@ionic/pro';
 import { ErrorHandler, Injectable, Injector, NgModule } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
+
+import { Geolocation } from '@ionic-native/geolocation';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
@@ -11,6 +14,7 @@ import { LoginPage } from '../pages/login/login';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { CongnitoProvider } from '../providers/congnito/congnito';
+import { ServerProvider } from '../providers/server/server';
 
 Pro.init('76fdbaae', {
   appVersion: '0.0.1'
@@ -47,6 +51,7 @@ export class MyErrorHandler implements ErrorHandler {
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
+    HttpClientModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -60,7 +65,9 @@ export class MyErrorHandler implements ErrorHandler {
     SplashScreen,
     IonicErrorHandler,
     [{ provide: ErrorHandler, useClass: MyErrorHandler }],
-    CongnitoProvider
+    CongnitoProvider,
+    ServerProvider,
+    Geolocation
   ]
 })
 export class AppModule { }

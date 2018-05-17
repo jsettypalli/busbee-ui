@@ -25,19 +25,19 @@ export class LoginPage {
   }
 
   signIn() {
-    this.congnitoProvider.signinUser(this.user, this.password, this.onSuccessfulLogin, this.onFailedLogin)
+    this.congnitoProvider.signinUser(this.user, this.password, this.onSuccessfulLogin.bind(this), this.onFailedLogin.bind(this))
   }
 
-  onSuccessfulLogin() {
+  onSuccessfulLogin(result) {
     localStorage.isLoggedIn = true;
     window.location.reload()
   }
 
-  onFailedLogin() {
+  onFailedLogin(error) {
     localStorage.isLoggedIn = undefined;
     let alert = this.alertCtrl.create({
       title: 'Login Error',
-      subTitle: 'The username or password is wrong. Please try again',
+      subTitle: error.message,
       buttons: ['OK']
     });
     alert.present();

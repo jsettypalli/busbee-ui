@@ -12,9 +12,9 @@ import { Pro } from '@ionic/pro';
 export class CongnitoProvider {
 
   private userPool: CognitoUserPool;
+  public tokens;
 
   constructor() {
-    Pro.monitoring.log('Hello CongnitoProvider Provider', { level: 'info' });
     this.userPool = new CognitoUserPool({
       UserPoolId: 'ap-south-1_9V9g6m8sU',
       ClientId: '13qoh7anskpi8ctbft9ob4hja6'
@@ -81,11 +81,12 @@ export class CongnitoProvider {
 
     this.cognitoUser.authenticateUser(authDetails, {
       onSuccess: (result) => {
-        onSuccess();
+        this.tokens = result;
+        onSuccess(result);
       },
       onFailure: (err) => {
         Pro.monitoring.exception(err)
-        onFailure();
+        onFailure(err);
       }
     })
   }
@@ -95,31 +96,25 @@ export class CongnitoProvider {
     this.userPool.getCurrentUser().signOut();
   }
 
-  localLogin() {
+  localLogin(onSuccess, onError) {
     this.cognitoUser = this.userPool.getCurrentUser();
     if (this.cognitoUser != null) {
+      let self = this;
       this.cognitoUser.getSession(function(err, session) {
         if (err) {
-          alert(err);
-          return;
+          onError(err);
+        } else {
+          onSuccess(session)
+          self.tokens = session;
         }
-
-        // NOTE: getSession must be called to authenticate user before calling getUserAttributes
-        this.cognitoUser.getUserAttributes(function(err, attributes) {
-          if (err) {
-            // Handle error
-          } else {
-            // Do something with attributes
-          }
-        });
       });
     }
   }
+
   changePassword(username, oldPassword, newPassword) {
     this.getUserPool(username);
     this.cognitoUser.changePassword(oldPassword, newPassword, function(err, result) {
       if (err) {
-        alert(err);
         Pro.monitoring.exception(err)
         return;
       }
