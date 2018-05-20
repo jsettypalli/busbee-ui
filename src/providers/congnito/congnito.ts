@@ -93,7 +93,7 @@ export class CongnitoProvider {
 
   /// Log User Out
   logoutUser() {
-    this.userPool.getCurrentUser().signOut();
+    return this.userPool.getCurrentUser().signOut();
   }
 
   localLogin(onSuccess, onError) {

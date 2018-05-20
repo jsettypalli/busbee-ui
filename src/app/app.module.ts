@@ -8,7 +8,7 @@ import { Geolocation } from '@ionic-native/geolocation';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
-import { ListPage } from '../pages/list/list';
+import { SettingsPage } from '../pages/settings/settings';
 import { LoginPage } from '../pages/login/login';
 
 import { StatusBar } from '@ionic-native/status-bar';
@@ -45,8 +45,8 @@ export class MyErrorHandler implements ErrorHandler {
   declarations: [
     MyApp,
     HomePage,
-    ListPage,
-    LoginPage
+    LoginPage,
+    SettingsPage
   ],
   imports: [
     BrowserModule,
@@ -57,7 +57,7 @@ export class MyErrorHandler implements ErrorHandler {
   entryComponents: [
     MyApp,
     HomePage,
-    ListPage,
+    SettingsPage,
     LoginPage
   ],
   providers: [

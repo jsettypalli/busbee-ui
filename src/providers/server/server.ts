@@ -1,5 +1,6 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { CongnitoProvider } from '../congnito/congnito';
 
 /*
   Generated class for the ServerProvider provider.
@@ -10,8 +11,15 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class ServerProvider {
 
-  constructor(public http: HttpClient) {
-    console.log('Hello ServerProvider Provider');
+  public map;
+  private url = 'http://52.66.155.37:8080';
+  private headers;
+
+  constructor(private http: HttpClient, private cognito: CongnitoProvider) {
+    this.headers = new HttpHeaders();
+    this.headers.set('Authorization', 'Bearer ' + this.cognito.tokens.idToken.jwtToken);
+    this.headers.set('Access-Control-Allow-Origin', 'http://52.66.155.37:8080');
+    console.log(this.headers);
   }
 
   initialise() {
@@ -28,6 +36,15 @@ export class ServerProvider {
       "next_bus_stop": { "Hanuman Nagar": { "latitude": 21.3456, "longitude": 72.3456 } }
     }
     );
+  }
+
+  onGetRunningBuses() {
+    return this.http.get(this.url + '/app/get_running_buses', {
+      headers: {
+        'Authorization': 'Bearer ' + this.cognito.tokens.idToken.jwtToken,
+        'Access-Control-Allow-Origin': 'http://52.66.155.37:8080'
+      }
+    });
   }
 
 }

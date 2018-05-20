@@ -30,7 +30,7 @@ export class LoginPage {
 
   onSuccessfulLogin(result) {
     localStorage.isLoggedIn = true;
-    window.location.reload()
+    window.location.reload();
   }
 
   onFailedLogin(error) {

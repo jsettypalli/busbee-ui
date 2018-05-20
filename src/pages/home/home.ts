@@ -19,7 +19,8 @@ export class HomePage implements AfterViewInit {
 
   ngAfterViewInit() {
     this.map = new this.MapmyIndia.Map("map", { center: [28.61, 77.23], zoomControl: true, hybrid: true });
-    this.server.initialise().then(result => {
+    this.server.map = this.map;
+    this.server.onGetRunningBuses().subscribe((result: any) => {
       if (result.role === 'DRIVER') {
         this.drive();
       }
@@ -76,6 +77,12 @@ export class HomePage implements AfterViewInit {
       duration: 3000
     });
     toast.present();
+  }
+
+  onGetRunningBuses() {
+    this.server.onGetRunningBuses().subscribe(result => {
+      console.log(result);
+    });
   }
 
 
