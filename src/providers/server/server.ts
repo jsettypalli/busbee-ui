@@ -1,6 +1,7 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CongnitoProvider } from '../congnito/congnito';
+import { Subject } from 'rxjs/Subject';
 
 /*
   Generated class for the ServerProvider provider.
@@ -12,14 +13,12 @@ import { CongnitoProvider } from '../congnito/congnito';
 export class ServerProvider {
 
   public map;
+  // private busNotify = new Subject<any>();
+  // busNotifyObservable = this.busNotify.asObservable();
   private url = 'http://52.66.155.37:8080';
-  private headers;
+  public runningBusses = [];
 
   constructor(private http: HttpClient, private cognito: CongnitoProvider) {
-    this.headers = new HttpHeaders();
-    this.headers.set('Authorization', 'Bearer ' + this.cognito.tokens.idToken.jwtToken);
-    this.headers.set('Access-Control-Allow-Origin', 'http://52.66.155.37:8080');
-    console.log(this.headers);
   }
 
   initialise() {
@@ -38,12 +37,20 @@ export class ServerProvider {
     );
   }
 
+  // public notifyBus(bus) {
+  //   this.busNotify.next(bus);
+  // }
+
   onGetRunningBuses() {
     return this.http.get(this.url + '/app/get_running_buses', {
       headers: {
-        'Authorization': 'Bearer ' + this.cognito.tokens.idToken.jwtToken,
-        'Access-Control-Allow-Origin': 'http://52.66.155.37:8080'
+        'Authorization': 'Bearer ' + this.cognito.tokens.idToken.jwtToken
       }
+    }).toPromise().then((result: [any]) => {
+      this.runningBusses = result;
+      return result;
+    }).catch(err => {
+      return Promise.reject(err);
     });
   }
 

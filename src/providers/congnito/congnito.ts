@@ -1,7 +1,8 @@
 // import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AuthenticationDetails, CognitoUser, CognitoUserAttribute, CognitoUserPool, CognitoUserSession } from 'amazon-cognito-identity-js';
-import { Pro } from '@ionic/pro';
+import { UtilsProvider } from '../../providers/utils/utils';
+
 /*
   Generated class for the CongnitoProvider provider.
 
@@ -14,7 +15,7 @@ export class CongnitoProvider {
   private userPool: CognitoUserPool;
   public tokens;
 
-  constructor() {
+  constructor(private utils: UtilsProvider) {
     this.userPool = new CognitoUserPool({
       UserPoolId: 'ap-south-1_9V9g6m8sU',
       ClientId: '13qoh7anskpi8ctbft9ob4hja6'
@@ -35,7 +36,7 @@ export class CongnitoProvider {
 
     this.userPool.signUp(user, password, phoneAtt, null, ((err, result) => {
       if (err) {
-        Pro.monitoring.exception(err)
+        this.utils.ionicMonitoring(err)
       }
     }))
   }
@@ -46,7 +47,7 @@ export class CongnitoProvider {
     this.getUserPool(username);
     this.cognitoUser.confirmRegistration(code, true, (err, result) => {
       if (err) {
-        Pro.monitoring.exception(err)
+        this.utils.ionicMonitoring(err)
       }
     })
   }
@@ -56,7 +57,7 @@ export class CongnitoProvider {
     this.cognitoUser.resendConfirmationCode(function(err, result) {
       if (err) {
         alert(err);
-        Pro.monitoring.exception(err)
+        this.utils.ionicMonitoring(err)
         return;
       }
     });
@@ -71,7 +72,7 @@ export class CongnitoProvider {
     customChallenge: (challengeParameters: any) => { }
   };
 
-  signinUser(username: string, password: string, onSuccess, onFailure) {
+  signinUser(username: string, password: string, onSuccess, onFailure, newPassword?) {
     const authData = {
       Username: username,
       Password: password
@@ -85,8 +86,20 @@ export class CongnitoProvider {
         onSuccess(result);
       },
       onFailure: (err) => {
-        Pro.monitoring.exception(err)
+        this.utils.ionicMonitoring(err)
         onFailure(err);
+      },
+      newPasswordRequired: (userAttributes, requiredAttributes) => {
+        delete userAttributes.email_verified;
+        this.cognitoUser.completeNewPasswordChallenge(newPassword, userAttributes, {
+          onSuccess: (result) => {
+            alert(result);
+            console.log(result)
+          },
+          onFailure: (err) => {
+            alert(err.message)
+          }
+        });
       }
     })
   }
@@ -104,8 +117,8 @@ export class CongnitoProvider {
         if (err) {
           onError(err);
         } else {
-          onSuccess(session)
           self.tokens = session;
+          onSuccess(session)
         }
       });
     }
@@ -115,7 +128,7 @@ export class CongnitoProvider {
     this.getUserPool(username);
     this.cognitoUser.changePassword(oldPassword, newPassword, function(err, result) {
       if (err) {
-        Pro.monitoring.exception(err)
+        this.utils.ionicMonitoring(err)
         return;
       }
     });

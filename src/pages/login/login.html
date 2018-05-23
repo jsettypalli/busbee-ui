@@ -14,15 +14,17 @@
 
 
 <ion-content padding>
+  <form (ngSubmit)="signIn()" novalidate>
     <ion-item>
       <ion-label floating>User Name</ion-label>
-      <ion-input type="text" [(ngModel)]="user"></ion-input>
+      <ion-input type="text" required [(ngModel)]="user" name="name"></ion-input>
     </ion-item>
     <ion-item>
       <ion-label floating>Password</ion-label>
-      <ion-input type="password" [(ngModel)]="password"></ion-input>
+      <ion-input type="password" required [(ngModel)]="password" name="password"></ion-input>
     </ion-item>
 
-    <button ion-button block outline color="secondary" (click)="signIn()">Sign In</button>
+    <button ion-button block outline color="secondary" type="submit">Sign In</button>
+  </form>
 
 </ion-content>

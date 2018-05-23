@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "244688974000",
+    "firebase_url": "https://busbee-a13b4.firebaseio.com",
+    "project_id": "busbee-a13b4",
+    "storage_bucket": "busbee-a13b4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:244688974000:android:6c55e3ef0d4dfb1a",
+        "android_client_info": {
+          "package_name": "com.jstech.busbee"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "244688974000-d73ffd3dmpmeqh4akba1aqabsjdt7dr8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCEbL-lVCnmk1wvQterXWJQPNUF499g3Gw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

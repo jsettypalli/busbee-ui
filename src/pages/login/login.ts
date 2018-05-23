@@ -1,7 +1,8 @@
-import { Component, ViewChild } from '@angular/core';
-import { IonicPage, AlertController } from 'ionic-angular';
+import { Component } from '@angular/core';
+import { ViewController } from 'ionic-angular';
 import { CongnitoProvider } from '../../providers/congnito/congnito';
-import { HomePage } from '../../pages/home/home';
+
+import { UtilsProvider } from '../../providers/utils/utils';
 
 @Component({
   selector: 'page-login',
@@ -12,9 +13,9 @@ export class LoginPage {
   public user;
   public password;
 
-  constructor(private congnitoProvider: CongnitoProvider, private alertCtrl: AlertController) {
-
-  }
+  constructor(private congnitoProvider: CongnitoProvider,
+    private utils: UtilsProvider,
+    private viewCtrl: ViewController) { }
 
   change() {
     this.congnitoProvider.changePassword(this.user, this.password, 'GetUrApp');
@@ -30,17 +31,12 @@ export class LoginPage {
 
   onSuccessfulLogin(result) {
     localStorage.isLoggedIn = true;
-    window.location.reload();
+    this.viewCtrl.dismiss();
   }
 
   onFailedLogin(error) {
     localStorage.isLoggedIn = undefined;
-    let alert = this.alertCtrl.create({
-      title: 'Login Error',
-      subTitle: error.message,
-      buttons: ['OK']
-    });
-    alert.present();
+    this.utils.alert('Login Error', error.message)
   }
 
 
