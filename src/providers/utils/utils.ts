@@ -29,10 +29,11 @@ export class UtilsProvider {
     alert.present();
   }
 
-  toast(msg) {
+  toast(msg, showButton?) {
     let toast = this.toastController.create({
       message: msg,
-      showCloseButton: true
+      duration: 5000,
+      showCloseButton: showButton ? showButton : false
     });
     toast.present();
   }

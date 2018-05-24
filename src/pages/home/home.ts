@@ -3,10 +3,9 @@ import { ServerProvider } from '../../providers/server/server';
 import { Geolocation } from '@ionic-native/geolocation';
 import { UtilsProvider } from '../../providers/utils/utils';
 import { Subscription } from 'rxjs/Subscription';
-import * as io from 'socket.io-client';
 
-// import { StompService } from '@stomp/ng2-stompjs';
-import { Message } from '@stomp/stompjs';
+import * as Stomp from 'stompjs';
+import * as SockJS from 'sockjs-client';
 
 @Component({
   selector: 'page-home',
@@ -17,8 +16,10 @@ export class HomePage implements AfterViewInit, OnDestroy, OnInit {
   private map;
   public bus;
   private locationWatch;
-  private socket;
+  private stompClient;
   private drivePath = [];
+  private serverUrl = 'http://52.66.155.37:8080/transportws';
+  private wsConnected = false;
 
   constructor(
     private server: ServerProvider,
@@ -28,7 +29,7 @@ export class HomePage implements AfterViewInit, OnDestroy, OnInit {
   }
 
   ngOnInit() {
-    this.socket = io('ws://52.66.155.37:8080/transportws/');
+    this.connectWS(() => { }, () => { });
   }
 
   ngAfterViewInit() {
@@ -44,17 +45,46 @@ export class HomePage implements AfterViewInit, OnDestroy, OnInit {
     if (bus.role === 'DRIVER') {
       this.drive(bus);
     } else {
-      this.socket.on('/subscribe/busposition/' + bus.tripId + '/' + bus.busId, (data) => {
-        console.log(data);
-      });
+      this.connectWS(() => {
+        this.stompClient.subscribe('/subscribe/busposition/' + bus.tripId + '/' + bus.busId, (message) => {
+          console.log(message);
+        });
+      }, () => { });
+
+      // this.socket.on('/subscribe/busposition/' + bus.tripId + '/' + bus.busId, (data) => {
+      //   console.log(data);
+      // });
       // this.socket.subscribe((message: Message) => {
       //   console.log(`Received: ${message.body}`);
       // });
+      this.drive(bus);
     }
   }
 
   ngOnDestroy() {
     this.locationWatch.unsubscribe();
+    this.stompClient.ws.close();
+  }
+
+  connectWS(onSuccess, onFailure) {
+    if (this.wsConnected) {
+      onSuccess();
+    } else {
+      let ws = new SockJS(this.serverUrl);
+      // let ws = new WebSocket("ws://52.66.155.37:8080/transportws");
+      this.stompClient = Stomp.over(ws);
+      let that = this;
+      this.stompClient.connect({}, function(frame) {
+        console.log(frame);
+        that.wsConnected = true;
+        onSuccess();
+      }, function(error) {
+        that.wsConnected = false;
+        that.stompClient.ws.close();
+        that.utils.toast('WebSocket Error: ' + error);
+        onFailure();
+      });
+    }
   }
 
   addMarker(lat, lng) {
@@ -69,13 +99,14 @@ export class HomePage implements AfterViewInit, OnDestroy, OnInit {
         latitude: data.coords.latitude,
         longitude: data.coords.longitude
       };
-      this.socket.emit('/publish/busposition/' + bus.tripId + '/' + bus.busId, JSON.stringify(position));
+      this.connectWS(() => {
+        this.stompClient.send('/publish/busposition/' + bus.tripId + '/' + bus.busId, {}, JSON.stringify(position));
+      }, () => { });
 
-      this.addMarker(data.coords.latitude, data.coords.longitude);
-      this.map.panTo([data.coords.latitude, data.coords.longitude]);
       // this.utils.toast('Lat:' + data.coords.latitude + '; Lng:' + data.coords.longitude);
-
+      this.addMarker(data.coords.latitude, data.coords.longitude);
       var center = new (<any>window).L.LatLng(data.coords.latitude, data.coords.longitude);
+      this.map.panTo(center);
       this.drivePath.push(center);
       var polylineParam = { weight: 4, opacity: 0.5 }
       var poly = new (<any>window).L.Polyline(this.drivePath, polylineParam);

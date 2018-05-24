@@ -5,7 +5,6 @@ import { ErrorHandler, Injectable, Injector, NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { Push } from '@ionic-native/push';
 import { Device } from '@ionic-native/device';
-// import { StompConfig, StompService } from '@stomp/ng2-stompjs';
 
 import { Geolocation } from '@ionic-native/geolocation';
 
@@ -45,18 +44,6 @@ export class MyErrorHandler implements ErrorHandler {
   }
 }
 
-// const stompConfig: StompConfig = {
-//   url: 'ws://52.66.155.37:8080/transportws',
-//   headers: {
-//     login: 'guest',
-//     passcode: 'guest'
-//   },
-//   heartbeat_in: 0, // Typical value 0 - disabled
-//   heartbeat_out: 20000, // Typical value 20000 - every 20 seconds
-//   reconnect_delay: 5000,
-//   debug: true
-// };
-
 @NgModule({
   declarations: [
     MyApp,
@@ -87,11 +74,6 @@ export class MyErrorHandler implements ErrorHandler {
     Push,
     Device,
     UtilsProvider
-    // StompService,
-    // {
-    //   provide: StompConfig,
-    //   useValue: stompConfig
-    // }
   ]
 })
 export class AppModule { }

@@ -128,7 +128,7 @@ export class MyApp implements OnInit, AfterViewInit {
             const pushObject: PushObject = this.push.init(options);
             pushObject.on('notification').subscribe((notification: any) => {
               console.log(notification);
-              this.utils.alert('Notification', notification);
+              this.utils.alert('Notification', notification.message);
             });
             pushObject.on('registration').subscribe((registration: any) => {
               console.log('Device registered', registration);
