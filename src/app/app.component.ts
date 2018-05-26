@@ -18,7 +18,12 @@ import { ServerProvider } from '../providers/server/server';
 })
 export class MyApp implements OnInit, AfterViewInit {
   // @ViewChild(Nav) nav: Nav;
-  @ViewChild(HomePage) homePage: HomePage;
+  private _homePage;
+  @ViewChild(HomePage)
+  set homePage(homePage: HomePage) {
+    this._homePage = homePage;
+    this.initialize();
+  }
 
   rootPage: any;
   pages: Array<{ title: string, component: any }>;
@@ -35,18 +40,18 @@ export class MyApp implements OnInit, AfterViewInit {
     private server: ServerProvider) {
   }
 
-  ngOnInit() {
+  ngOnInit() { }
+
+  ngAfterViewInit() { }
+
+  initialize() {
     this.platform.ready().then(() => {
       this.getPushToken();
       this.statusBar.styleDefault();
       // this.nav.setRoot(HomePage);
-      this.homePage.bus = null;
       this.silentLogin();
+      this._homePage.bus = null;
     });
-  }
-
-  ngAfterViewInit() {
-
   }
 
   silentLogin() {
@@ -81,18 +86,25 @@ export class MyApp implements OnInit, AfterViewInit {
   }
 
   getBusses() {
+    let selectedTrip = null;
     this.server.onGetRunningBuses().then((result: any) => {
       this.buses = result;
       console.log(result);
-      this.utils.toast('Role: ' + result[0].role);
-      this.homePage.selectBus(result[0]);
+      selectedTrip = result[0];
+      this.utils.toast('Role: ' + selectedTrip.role);
+      this._homePage.selectBus(selectedTrip);
     }).catch(err => {
-      this.utils.alert('Get Running Buses', err.message);
+      if (selectedTrip) {
+        this.utils.alert('Map Error', err.message);
+        this._homePage.selectBus(selectedTrip);
+      }
+      else
+        this.utils.alert('Get Running Buses', err.message);
     });
   }
 
   selectBus(bus) {
-    this.homePage.selectBus(bus);
+    this._homePage.selectBus(bus);
   }
 
   openSettings() {
@@ -112,8 +124,11 @@ export class MyApp implements OnInit, AfterViewInit {
           }).then(() => {
             const options: PushOptions = {
               android: {
+                senderID: '244688974000',
                 sound: true,
-                vibrate: true
+                vibrate: true,
+                icon: 'icon',
+                iconColor: 'blue'
               },
               ios: {
                 alert: true,
@@ -131,8 +146,7 @@ export class MyApp implements OnInit, AfterViewInit {
               this.utils.alert('Notification', notification.message);
             });
             pushObject.on('registration').subscribe((registration: any) => {
-              console.log('Device registered', registration);
-              console.log(this.device);
+              this.registerDevice(registration);
             });
             pushObject.on('error').subscribe(error => {
               this.utils.alert('Error with Push plugin', error.message);
@@ -144,5 +158,28 @@ export class MyApp implements OnInit, AfterViewInit {
           this.utils.alert('Push Notification', 'We do not have permission to send push notifications');
         }
       });
+  }
+
+  registerDevice(registration) {
+    console.log('Device registered', registration);
+    console.log(this.device);
+    let deviceDetails = {
+      platform: this.device.platform.toLowerCase(),
+      device_id: this.device.uuid,
+      application_token: registration.registrationId
+    }
+    let isReplace = 0;
+    if (localStorage.registrationId === 'undefined' || localStorage.registrationId === undefined) {
+      isReplace = 1;
+    } else if (localStorage.registrationId !== registration.registrationId) {
+      isReplace = 2;
+    }
+    if (isReplace)
+      this.server.registerDevice(deviceDetails, isReplace).subscribe(data => {
+        this.utils.toast('Device registered');
+      }, error => {
+        this.utils.alert('Device Registration Error', error.message);
+      });
+    localStorage.registrationId = registration.registrationId;
   }
 }

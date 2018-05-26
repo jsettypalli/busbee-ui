@@ -10,3 +10,9 @@
 <ion-content padding>
   <div id="map"></div>
 </ion-content>
+
+<ion-footer *ngIf="message">
+  <ion-toolbar>
+    <ion-title>The bus #{{message.id}} is scheduled to start at {{message.time | time:'shortTime'}}</ion-title>
+  </ion-toolbar>
+</ion-footer>

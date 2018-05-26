@@ -21,22 +21,6 @@ export class ServerProvider {
   constructor(private http: HttpClient, private cognito: CongnitoProvider) {
   }
 
-  initialise() {
-    return Promise.resolve({
-      "role": "DRIVER",
-      "trip_id": 1,
-      "bus_id": 2,
-      "start_time": "2018-05-09 7:00 AM IST",
-      "current_position": { "latitude": 23.4567, "longitude": 75.4567 },
-      "visited_bus_stops": [
-        { "miyapur": { "latitude": 21.3456, "longitude": 72.3456 } },
-        { "RTA Kondapur": { "latitude": 21.3456, "longitude": 72.3456 } }
-      ],
-      "next_bus_stop": { "Hanuman Nagar": { "latitude": 21.3456, "longitude": 72.3456 } }
-    }
-    );
-  }
-
   // public notifyBus(bus) {
   //   this.busNotify.next(bus);
   // }
@@ -56,6 +40,28 @@ export class ServerProvider {
       return result;
     }).catch(err => {
       return Promise.reject(err);
+    });
+  }
+
+  registerDevice(deviceDetails, isReplace) {
+    let method = isReplace === 1 ? 'post' : 'put';
+    let url = this.url + '/app/devices';
+    return this.http.request(method, url, {
+      headers: {
+        'Authorization': 'Bearer ' + this.cognito.tokens.idToken.jwtToken
+      },
+      params: deviceDetails
+    })
+  }
+
+  getRoute(start, end) {
+    const licenceKey = 'gphew1aw7wl5eo2tck9pzxljtnr3gbq8';
+    let url = 'http://apis.mapmyindia.com/advancedmaps/v1/' + licenceKey + '/route'
+    return this.http.get(url, {
+      params: {
+        start: start.latitude + ',' + start.longitude,
+        destination: end.latitude + ',' + end.longitude
+      }
     });
   }
 

@@ -89,6 +89,7 @@ export class CongnitoProvider {
         this.utils.ionicMonitoring(err)
         onFailure(err);
       },
+      // TODO: Test with new user accounts
       newPasswordRequired: (userAttributes, requiredAttributes) => {
         delete userAttributes.email_verified;
         this.cognitoUser.completeNewPasswordChallenge(newPassword, userAttributes, {
