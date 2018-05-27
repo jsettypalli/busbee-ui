@@ -85,12 +85,82 @@ export class MyApp implements OnInit, AfterViewInit {
     this.login();
   }
 
-  getBusses() {
+  mockResult = [{
+    'role': 'PARENT',
+    inTransit: true,
+    'tripId': 1,
+    'busId': 1,
+    'startDateTime': '2018-05-09 7:00 AM IST',
+    'currentLocation': { 'latitude': 12.9670893, 'longitude': 80.2432824 },
+    'visitedBusStops': [
+      {
+        busStopName: 'Madhya Kailash',
+        location: { 'latitude': 13.0065521, 'longitude': 80.2447926 }
+      },
+      {
+        busStopName: 'Thiruvanmiyur',
+        location: { 'latitude': 12.9832548, 'longitude': 80.2491742 }
+      }
+    ],
+    'nextBusStop': {
+      busStopName: 'Medavakkam',
+      location: { 'latitude': 12.9181872, 'longitude': 80.1949488 }
+    }
+  }, {
+    'role': 'PARENT',
+    inTransit: true,
+    'tripId': 4,
+    'busId': 4,
+    'startDateTime': '2018-05-09 7:00 AM IST',
+    'currentLocation': { 'latitude': 12.9832548, 'longitude': 80.2491742 },
+    'visitedBusStops': [
+      {
+        busStopName: 'Medavakkam',
+        location: { 'latitude': 12.9181872, 'longitude': 80.1949488 }
+      }
+    ],
+    'nextBusStop': {
+      busStopName: 'Madhya Kailash',
+      location: { 'latitude': 13.0065521, 'longitude': 80.2447926 }
+    }
+  },
+  {
+    'role': 'PARENT',
+    inTransit: false,
+    'tripId': 2,
+    'busId': 2,
+    'startDateTime': '2018-05-25T07:00:39.892Z',
+    'currentLocation': null,
+    'visitedBusStops': null,
+    'nextBusStop': {
+      'busStopName': 'Bhavyas Alluri Meadows',
+      'location': { 'id': 5, 'latitude': 17.453597, 'longitude': 78.366742 }
+    }
+  },
+  {
+    'role': 'TRANSPORT_INCHARGE',
+    inTransit: false,
+    'tripId': 3,
+    'busId': 3,
+    'startDateTime': '2018-05-25T07:00:39.892Z',
+    'currentLocation': null,
+    'visitedBusStops': null,
+    'nextBusStop': {
+      'busStopName': 'Bhavyas Alluri Meadows',
+      'location': { 'id': 5, 'latitude': 17.453597, 'longitude': 78.366742 }
+    }
+  }];
+
+  getBusses(busId?) {
     let selectedTrip = null;
     this.server.onGetRunningBuses().then((result: any) => {
+      result = this.mockResult
       this.buses = result;
       console.log(result);
-      selectedTrip = result[0];
+      if (!busId)
+        selectedTrip = result[0];
+      else
+        selectedTrip = result.find(bus => bus.busId === busId)
       this.utils.toast('Role: ' + selectedTrip.role);
       this._homePage.selectBus(selectedTrip);
     }).catch(err => {
@@ -104,7 +174,7 @@ export class MyApp implements OnInit, AfterViewInit {
   }
 
   selectBus(bus) {
-    this._homePage.selectBus(bus);
+    this.getBusses(bus.busId);
   }
 
   openSettings() {
@@ -117,8 +187,8 @@ export class MyApp implements OnInit, AfterViewInit {
       .then((res: any) => {
         if (res.isEnabled) {
           this.push.createChannel({
-            id: "busbee_mobile",
-            description: "mobile notification channel",
+            id: 'busbee_mobile',
+            description: 'mobile notification channel',
             // The importance property goes from 1 = Lowest, 2 = Low, 3 = Normal, 4 = High and 5 = Highest.
             importance: 3
           }).then(() => {

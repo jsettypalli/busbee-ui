@@ -2,7 +2,6 @@ import { Component, AfterViewInit, OnDestroy, OnInit } from '@angular/core';
 import { ServerProvider } from '../../providers/server/server';
 import { Geolocation } from '@ionic-native/geolocation';
 import { UtilsProvider } from '../../providers/utils/utils';
-import { Subscription } from 'rxjs/Subscription';
 
 import * as Stomp from 'stompjs';
 import * as SockJS from 'sockjs-client';
@@ -22,7 +21,12 @@ export class HomePage implements AfterViewInit, OnDestroy, OnInit {
   private wsConnected = false;
   private polylines = {
     current: null,
-    last: null
+    last: null,
+    previous: []
+  };
+  private markers = {
+    bus: null,
+    stops: []
   }
   private currentLocation = {
     latitude: 0,
@@ -50,50 +54,31 @@ export class HomePage implements AfterViewInit, OnDestroy, OnInit {
     this.server.map = this.map;
   }
 
-  mockBus = {
-    'role': 'PARENT',
-    'tripId': 1,
-    'busId': 2,
-    'startDateTime': '2018-05-09 7:00 AM IST',
-    'currentLocation': { 'latitude': 12.9670893, 'longitude': 80.2432824 },
-    'visitedBusStops': [
-      {
-        busStopName: 'Madhya Kailash',
-        location: { 'latitude': 13.0065521, 'longitude': 80.2447926 }
-      },
-      {
-        busStopName: 'Thiruvanmiyur',
-        location: { 'latitude': 12.9832548, 'longitude': 80.2491742 }
-      }
-    ],
-    'nextBusStop': {
-      busStopName: 'Medavakkam',
-      location: { 'latitude': 12.9181872, 'longitude': 80.1949488 }
-    }
-  };
-
   selectBus(bus) {
-    bus = this.mockBus;
-    this.utils.toast('TRIP: ' + bus.tripId + '; BUS: ' + bus.busId + '  ;');
+    this.clearPolyLines();
+    this.utils.toast('TRIP: ' + bus.tripId + '; BUS: ' + bus.busId + '  ;' + ' Role: ' + bus.role + ' ;');
     // bus not started. TODO: isStarted flag
-    if (!bus.currentLocation) {
+    if (!bus.inTransit) {
       this.message = {
         id: bus.busId,
         time: bus.startDateTime
       }
+      this.utils.alert('Bus not started', 'The bus #' + bus.busId + ' is scheduled to start at ' + new Date(bus.startDateTime))
       // TODO: switch to active mode. how to?
     } else
       if (bus.role === 'DRIVER') {
-        this.drive(bus);
         this.plotRoute(bus);
+        this.drive(bus);
       } else {
+        this.plotRoute(bus);
         this.connectWS(() => {
           this.stompClient.subscribe('/subscribe/busposition/' + bus.tripId + '/' + bus.busId, (message) => {
             console.log(message);
             this.moveBus();
           });
         }, () => { });
-        this.plotRoute(bus);
+        // TODO: need real data to test
+        this.moveBus();
       }
   }
 
@@ -125,17 +110,18 @@ export class HomePage implements AfterViewInit, OnDestroy, OnInit {
 
   addMarker(lat, lng, isBus?, title?) {
     var w = 40,
-      h = 100;
+      h = 50;
     let icon = (<any>window).L.icon({
       iconUrl: isBus ? 'assets/imgs/bus.png' : 'assets/imgs/marker.png',
       iconAnchor: [w / 2, h / 2], //Handles the marker anchor point. For a correct anchor point [ImageWidth/2,ImageHeight/2]
-      iconSize: [40, 100]
+      iconSize: [w, h]
     })
     let options = {
       icon: icon,
       title: title ? title : null
     }
     let marker = (<any>window).L.marker([lat, lng], options).addTo(this.map);
+    return marker;
   }
 
   drive(bus) {
@@ -165,41 +151,44 @@ export class HomePage implements AfterViewInit, OnDestroy, OnInit {
 
   plotRoute(bus) {
     if (bus.currentLocation) {
-      this.addMarker(bus.currentLocation.latitude, bus.currentLocation.longitude, true);
+      let busMarker = this.addMarker(bus.currentLocation.latitude, bus.currentLocation.longitude, true);
+      this.markers.bus = busMarker;
       var center = new (<any>window).L.LatLng(bus.currentLocation.latitude, bus.currentLocation.longitude);
       this.map.panTo(center);
     }
     // current to next
     // TODO: how to get nextBusStop on websocket
     if (bus.currentLocation)
-      this.getRoutes(bus.currentLocation, bus.nextBusStop.location, 'blue').then(poly => {
+      this.getRoutes(bus.currentLocation, bus.nextBusStop.location, '#148d73').then(poly => {
         this.map.fitBounds(poly.getBounds());
-        this.addMarker(bus.nextBusStop.location.latitude, bus.nextBusStop.location.longitude, false, bus.nextBusStop.busStopName);
+        let nextBusStopMarker = this.addMarker(bus.nextBusStop.location.latitude, bus.nextBusStop.location.longitude, false, bus.nextBusStop.busStopName);
+        this.markers.stops.push(nextBusStopMarker);
         this.polylines.current = poly;
       })
 
     // last to current
     if (bus.visitedBusStops && bus.visitedBusStops.length) {
       let last = bus.visitedBusStops[bus.visitedBusStops.length - 1];
-      this.addMarker(last.location.latitude, last.location.longitude, false, last.busStopName);
-      this.getRoutes(last.location, bus.currentLocation, '#148d73').then(poly => {
-        this.map.fitBounds(poly.getBounds());
+      let lastBusStopMarker = this.addMarker(last.location.latitude, last.location.longitude, false, last.busStopName);
+      this.markers.stops.push(lastBusStopMarker);
+      this.getRoutes(last.location, bus.currentLocation, 'blue').then(poly => {
         this.polylines.last = poly;
       })
     }
     // previous
     if (bus.visitedBusStops && bus.visitedBusStops.length > 1) {
       let first = bus.visitedBusStops[0];
-      this.addMarker(first.location.latitude, first.location.longitude, false, first.busStopName);
+      let firstBusStopMarker = this.addMarker(first.location.latitude, first.location.longitude, false, first.busStopName);
+      this.markers.stops.push(firstBusStopMarker);
       for (let key in bus.visitedBusStops) {
         let i = parseInt(key);
         if (i !== (bus.visitedBusStops.length - 1)) {
           let start = bus.visitedBusStops[i];
           let stop = bus.visitedBusStops[i + 1];
-          this.addMarker(stop.location.latitude, stop.location.longitude, false, stop.busStopName);
-          this.getRoutes(stop.location, start.location, 'green').then(poly => {
-            this.map.fitBounds(poly.getBounds());
-            this.polylines.last = poly;
+          let busStopMarker = this.addMarker(stop.location.latitude, stop.location.longitude, false, stop.busStopName);
+          this.markers.stops.push(busStopMarker);
+          this.getRoutes(stop.location, start.location, 'blue').then(poly => {
+            this.polylines.previous.push(poly);
           })
         }
       };
@@ -207,7 +196,44 @@ export class HomePage implements AfterViewInit, OnDestroy, OnInit {
   }
 
   moveBus() {
+    // let decorator = (<any>window).L.PolylineDecorator(this.polylines.current).addTo(this.map);
+    // let offset = 0;
+    // var w = 40,
+    //   h = 50;
+    // //offset and repeat can be each defined as a number,in pixels,or in percentage of the line's length,as a string
+    // window.setInterval(function() {
+    //   decorator.setPatterns([{
+    //     offset: offset + '%', //Offset value for first pattern symbol,from the start point of the line. Default is 0.
+    //     repeat: 0, //repeat pattern at every x offset. 0 means no repeat.
+    //     //Symbol type.
+    //     symbol: (<any>window).L.Symbol.marker({
+    //       rotate: true, //move marker along the line. false value may cause the custom marker to shift away from a curved polyline. Default is false.
+    //       markerOptions: {
+    //         icon: (<any>window).L.icon({
+    //           iconUrl: 'bus.png',
+    //           iconAnchor: [w / 2, h / 2], //Handles the marker anchor point. For a correct anchor point [ImageWidth/2,ImageHeight/2]
+    //           iconSize: [w, h]
+    //         })
+    //       }
+    //     })
+    //   }]);
+    //   if ((offset += 0.03) > 100) //Sets offset. Smaller the value smoother the movement.
+    //     offset = 0;
+    // }, 30); //Time in ms. Increases/decreases the speed of the marker movement on decrement/increment of 1 respectively. values should not be less than 1.
 
+  }
+
+  clearPolyLines() {
+    if (this.polylines.current)
+      this.map.removeLayer(this.polylines.current);
+    if (this.polylines.last)
+      this.map.removeLayer(this.polylines.last);
+    if (this.polylines.previous.length)
+      this.polylines.previous.forEach(poly => this.map.removeLayer(poly));
+    if (this.markers.bus)
+      this.map.removeLayer(this.markers.bus);
+    if (this.markers.stops.length)
+      this.markers.stops.forEach(stopMarket => this.map.removeLayer(stopMarket));
   }
 
   getRoutes(start, stop, color) {

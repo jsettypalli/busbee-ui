@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CongnitoProvider } from '../congnito/congnito';
-import { Subject } from 'rxjs/Subject';
 
 /*
   Generated class for the ServerProvider provider.
