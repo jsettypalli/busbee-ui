@@ -153,6 +153,7 @@ export class MyApp implements OnInit, AfterViewInit {
 
   getBusses(busId?) {
     let selectedTrip = null;
+    this._homePage.clearPolyLines();
     this.server.onGetRunningBuses().then((result: any) => {
       result = this.mockResult
       this.buses = result;

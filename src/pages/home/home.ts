@@ -85,6 +85,7 @@ export class HomePage implements AfterViewInit, OnDestroy, OnInit {
   ngOnDestroy() {
     this.locationWatch.unsubscribe();
     this.stompClient.ws.close();
+    this.clearPolyLines();
   }
 
   connectWS(onSuccess, onFailure) {

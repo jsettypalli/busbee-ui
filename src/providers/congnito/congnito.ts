@@ -72,7 +72,7 @@ export class CongnitoProvider {
     customChallenge: (challengeParameters: any) => { }
   };
 
-  signinUser(username: string, password: string, onSuccess, onFailure, newPassword?) {
+  signinUser(username: string, password: string, onSuccess, onFailure, onNewPassword) {
     const authData = {
       Username: username,
       Password: password
@@ -91,18 +91,24 @@ export class CongnitoProvider {
       },
       // TODO: Test with new user accounts
       newPasswordRequired: (userAttributes, requiredAttributes) => {
-        delete userAttributes.email_verified;
-        this.cognitoUser.completeNewPasswordChallenge(newPassword, userAttributes, {
-          onSuccess: (result) => {
-            alert(result);
-            console.log(result)
-          },
-          onFailure: (err) => {
-            alert(err.message)
-          }
-        });
+        onNewPassword(userAttributes);
       }
     })
+  }
+
+  setNewPassword(newPassword, userAttributes, onSuccess, onFailure) {
+    delete userAttributes.email_verified;
+    delete userAttributes.phone_number_verified;
+    this.cognitoUser.completeNewPasswordChallenge(newPassword, userAttributes, {
+      onSuccess: (result) => {
+        this.tokens = result;
+        onSuccess(result);
+      },
+      onFailure: (err) => {
+        this.utils.ionicMonitoring(err)
+        onFailure(err);
+      }
+    });
   }
 
   /// Log User Out
