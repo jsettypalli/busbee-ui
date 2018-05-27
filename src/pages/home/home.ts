@@ -32,6 +32,7 @@ export class HomePage implements AfterViewInit, OnDestroy, OnInit {
     latitude: 0,
     longitude: 0
   };
+  private travelledPath = [];
   public message;
 
   constructor(
@@ -65,21 +66,23 @@ export class HomePage implements AfterViewInit, OnDestroy, OnInit {
       }
       this.utils.alert('Bus not started', 'The bus #' + bus.busId + ' is scheduled to start at ' + new Date(bus.startDateTime))
       // TODO: switch to active mode. how to?
-    } else
-      if (bus.role === 'DRIVER') {
-        this.plotRoute(bus);
-        this.drive(bus);
-      } else {
-        this.plotRoute(bus);
-        this.connectWS(() => {
-          this.stompClient.subscribe('/subscribe/busposition/' + bus.tripId + '/' + bus.busId, (message) => {
-            console.log(message);
-            this.moveBus();
-          });
-        }, () => { });
-        // TODO: need real data to test
-        this.moveBus();
-      }
+    }
+    if (bus.role === 'DRIVER') {
+      this.plotRoute(bus);
+      this.drive(bus);
+    } else {
+      this.plotRoute(bus);
+      this.connectWS(() => {
+        this.stompClient.subscribe('/subscribe/busposition/' + bus.tripId + '/' + bus.busId, (message) => {
+          console.log(message);
+          if (message.data.nextBusStop) {
+            bus.nextBusStop = message.data.nextBusStop;
+          }
+          this.moveBus(message.data.location, bus.nextBusStop);
+        });
+      }, () => { });
+    }
+    this.watchToStop(bus);
   }
 
   ngOnDestroy() {
@@ -109,6 +112,15 @@ export class HomePage implements AfterViewInit, OnDestroy, OnInit {
     }
   }
 
+  watchToStop(bus) {
+    this.connectWS(() => {
+      this.stompClient.subscribe('/subscribe/stop_sending_busposition/' + bus.tripId + '/' + bus.busId, (message) => {
+        this.locationWatch.unsubscribe();
+        this.stompClient.ws.close();
+      });
+    }, () => { });
+  }
+
   addMarker(lat, lng, isBus?, title?) {
     var w = 40,
       h = 50;
@@ -128,7 +140,7 @@ export class HomePage implements AfterViewInit, OnDestroy, OnInit {
   drive(bus) {
     this.locationWatch = this.geolocation.watchPosition();
     this.locationWatch.subscribe((data) => {
-      this.moveBus();
+      this.moveBus(data.coords, bus.nextBusStop);
       let position = {
         busId: bus.busId,
         latitude: data.coords.latitude,
@@ -172,7 +184,7 @@ export class HomePage implements AfterViewInit, OnDestroy, OnInit {
       let last = bus.visitedBusStops[bus.visitedBusStops.length - 1];
       let lastBusStopMarker = this.addMarker(last.location.latitude, last.location.longitude, false, last.busStopName);
       this.markers.stops.push(lastBusStopMarker);
-      this.getRoutes(last.location, bus.currentLocation, 'blue').then(poly => {
+      this.getRoutes(last.location, bus.currentLocation, 'blue', true).then(poly => {
         this.polylines.last = poly;
       })
     }
@@ -196,7 +208,17 @@ export class HomePage implements AfterViewInit, OnDestroy, OnInit {
     }
   }
 
-  moveBus() {
+  moveBus(coords, nextBusStop) {
+    // TODO: need real data to test
+    let latlng = new (<any>window).L.LatLng(coords.latitude, coords.longitude);
+    this.travelledPath.push(latlng);
+    this.map.removeLayer(this.polylines.last);
+    this.polylines.last = this.plotLine(this.travelledPath, 'blue');
+    this.getRoutes(coords, nextBusStop.location, '#148d73').then(poly => {
+      this.map.fitBounds(poly.getBounds());
+      this.polylines.current = poly;
+    })
+
     // let decorator = (<any>window).L.PolylineDecorator(this.polylines.current).addTo(this.map);
     // let offset = 0;
     // var w = 40,
@@ -237,11 +259,13 @@ export class HomePage implements AfterViewInit, OnDestroy, OnInit {
       this.markers.stops.forEach(stopMarket => this.map.removeLayer(stopMarket));
   }
 
-  getRoutes(start, stop, color) {
+  getRoutes(start, stop, color, isLastTravelled?) {
     return this.server.getRoute(start, stop).toPromise().then((data: any) => {
       let points;
       if (data.results.trips.length)
         points = this.utils.decode(data.results.trips[0].pts);
+      if (isLastTravelled)
+        this.travelledPath = points;
       return this.plotLine(points, color);
     }).catch(error => {
       console.log(error);
