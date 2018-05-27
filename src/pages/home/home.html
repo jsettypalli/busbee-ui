@@ -1,19 +1,32 @@
 <ion-header>
-  <ion-navbar>
-    <button ion-button menuToggle>
+  <ion-navbar color="default">
+
+    <button ion-button menuToggle color="light">
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>Home</ion-title>
+    <ion-icon ios="ios-notifications" md="md-notifications" color="color-3" class="bel"></ion-icon>
+
+
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-  <div id="map"></div>
-    <ion-title>The bus #{{message.id}} is scheduled to start at {{message.time | time:'shortTime'}}</ion-title>
+  <div id="map" class="map"></div>
 </ion-content>
 
-<!-- <ion-footer > -->
-  <!-- <ion-toolbar *ngIf="message">
-    <ion-title>The bus #{{message.id}} is scheduled to start at {{message.time | time:'shortTime'}}</ion-title>
-  </ion-toolbar> -->
-<!-- </ion-footer> -->
+
+<ion-footer>
+
+  <div class="alert ">
+       <button class="close" onclick="close()">&times;</button>
+    <img src="../../assets/imgs/user.png" class="user-img">
+
+    <div class="tik">Ramesh<br/>Routh #47<br/>TN-22-AA 2452<br/></div><br/>
+
+    <div class="msg">The bus is 2 stops away and is expected to reach in</div>
+     <div class="min" color="color-3"><strong>10</strong><p>mins</p></div>
+
+
+    </div>
+
+</ion-footer>

@@ -1,3 +1,40 @@
 page-settings {
+    .nav{
+        float:left;
+    }
+    .bg{
+        margin-top: 50px;
+        background-image: url('../assets/imgs/bg-02.png');
+        background-repeat: no-repeat;
+        background-size: 120%;
+        background-position:bottom;
+    }
+
+   ion-range{
+       height:20px;
+    }
+   .head strong{
+    font-size: 25px;
+    }
+   .head{
+    margin-right:10px;
+    margin-top:-60px;
+    font-size:35px;
+    }
+
+  .bel{
+    margin-right:10px;
+    margin-top:-30px;
+    font-size:35px;
+    float:right;
+    }
+  .tg{
+      background: transparent;
+      box-shadow: 0 0 2px;
+    }
+    .back{
+        width:70px;
+        float:left;
+    }
 
 }
