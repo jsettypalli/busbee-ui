@@ -12,6 +12,7 @@ import { CongnitoProvider } from '../providers/congnito/congnito';
 import { SettingsPage } from '../pages/settings/settings';
 import { UtilsProvider } from '../providers/utils/utils';
 import { ServerProvider } from '../providers/server/server';
+import { MockDataProvider } from '../providers/mock-data/mock-data';
 
 @Component({
   templateUrl: 'app.html'
@@ -37,7 +38,8 @@ export class MyApp implements OnInit, AfterViewInit {
     private push: Push,
     private utils: UtilsProvider,
     private device: Device,
-    private server: ServerProvider) {
+    private server: ServerProvider,
+    private mockData: MockDataProvider) {
   }
 
   ngOnInit() { }
@@ -85,83 +87,18 @@ export class MyApp implements OnInit, AfterViewInit {
     this.login();
   }
 
-  mockResult = [{
-    'role': 'PARENT',
-    inTransit: true,
-    'tripId': 1,
-    'busId': 1,
-    'startDateTime': '2018-05-09 7:00 AM IST',
-    'currentLocation': { 'latitude': 12.9670893, 'longitude': 80.2432824 },
-    'visitedBusStops': [
-      {
-        busStopName: 'Madhya Kailash',
-        location: { 'latitude': 13.0065521, 'longitude': 80.2447926 }
-      },
-      {
-        busStopName: 'Thiruvanmiyur',
-        location: { 'latitude': 12.9832548, 'longitude': 80.2491742 }
-      }
-    ],
-    'nextBusStop': {
-      busStopName: 'Medavakkam',
-      location: { 'latitude': 12.9181872, 'longitude': 80.1949488 }
-    }
-  }, {
-    'role': 'PARENT',
-    inTransit: true,
-    'tripId': 4,
-    'busId': 4,
-    'startDateTime': '2018-05-09 7:00 AM IST',
-    'currentLocation': { 'latitude': 12.9832548, 'longitude': 80.2491742 },
-    'visitedBusStops': [
-      {
-        busStopName: 'Medavakkam',
-        location: { 'latitude': 12.9181872, 'longitude': 80.1949488 }
-      }
-    ],
-    'nextBusStop': {
-      busStopName: 'Madhya Kailash',
-      location: { 'latitude': 13.0065521, 'longitude': 80.2447926 }
-    }
-  },
-  {
-    'role': 'PARENT',
-    inTransit: false,
-    'tripId': 2,
-    'busId': 2,
-    'startDateTime': '2018-05-25T07:00:39.892Z',
-    'currentLocation': null,
-    'visitedBusStops': null,
-    'nextBusStop': {
-      'busStopName': 'Bhavyas Alluri Meadows',
-      'location': { 'id': 5, 'latitude': 17.453597, 'longitude': 78.366742 }
-    }
-  },
-  {
-    'role': 'TRANSPORT_INCHARGE',
-    inTransit: false,
-    'tripId': 3,
-    'busId': 3,
-    'startDateTime': '2018-05-25T07:00:39.892Z',
-    'currentLocation': null,
-    'visitedBusStops': null,
-    'nextBusStop': {
-      'busStopName': 'Bhavyas Alluri Meadows',
-      'location': { 'id': 5, 'latitude': 17.453597, 'longitude': 78.366742 }
-    }
-  }];
-
-  getBusses(busId?) {
+  getBusses(index?) {
     let selectedTrip = null;
     this._homePage.clearPolyLines();
     this.server.onGetRunningBuses().then((result: any) => {
-      result = this.mockResult
+      if (this.mockData.useMockData)
+        result = this.mockData.serverResponse;
       this.buses = result;
       console.log(result);
-      if (!busId)
+      if (!index)
         selectedTrip = result[0];
       else
-        selectedTrip = result.find(bus => bus.busId === busId)
+        selectedTrip = result[index];
       this.utils.toast('Role: ' + selectedTrip.role);
       this._homePage.selectBus(selectedTrip);
     }).catch(err => {
@@ -174,8 +111,8 @@ export class MyApp implements OnInit, AfterViewInit {
     });
   }
 
-  selectBus(bus) {
-    this.getBusses(bus.busId);
+  selectBus(index) {
+    this.getBusses(index);
   }
 
   openSettings() {

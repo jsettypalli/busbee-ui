@@ -2,6 +2,7 @@ import { Component, AfterViewInit, OnDestroy, OnInit } from '@angular/core';
 import { ServerProvider } from '../../providers/server/server';
 import { Geolocation } from '@ionic-native/geolocation';
 import { UtilsProvider } from '../../providers/utils/utils';
+import { MockDataProvider } from '../../providers/mock-data/mock-data';
 
 import * as Stomp from 'stompjs';
 import * as SockJS from 'sockjs-client';
@@ -38,7 +39,8 @@ export class HomePage implements AfterViewInit, OnDestroy, OnInit {
   constructor(
     private server: ServerProvider,
     private geolocation: Geolocation,
-    private utils: UtilsProvider) {
+    private utils: UtilsProvider,
+    private mockData: MockDataProvider) {
     this.MapmyIndia = (<any>window).MapmyIndia;
     this.geolocation.getCurrentPosition().then(data => {
       this.currentLocation = data.coords;
@@ -75,10 +77,15 @@ export class HomePage implements AfterViewInit, OnDestroy, OnInit {
       this.connectWS(() => {
         this.stompClient.subscribe('/subscribe/busposition/' + bus.tripId + '/' + bus.busId, (message) => {
           console.log(message);
-          if (message.data.nextBusStop) {
-            bus.nextBusStop = message.data.nextBusStop;
+          let data = JSON.parse(message.body);
+          if (message.nextBusStop) {
+            bus.nextBusStop = message.nextBusStop;
           }
-          this.moveBus(message.data.location, bus.nextBusStop);
+          let location = {
+            latitude: data.latitude,
+            longitude: data.longitude
+          }
+          this.moveBus(location, bus.nextBusStop);
         });
       }, () => { });
     }
@@ -138,13 +145,16 @@ export class HomePage implements AfterViewInit, OnDestroy, OnInit {
   }
 
   drive(bus) {
-    this.locationWatch = this.geolocation.watchPosition();
+    if (this.mockData.useMockData)
+      this.locationWatch = this.mockData.busPosition;
+    else
+      this.locationWatch = this.geolocation.watchPosition();
     this.locationWatch.subscribe((data) => {
       this.moveBus(data.coords, bus.nextBusStop);
       let position = {
         busId: bus.busId,
-        latitude: data.coords.latitude,
-        longitude: data.coords.longitude
+        latitude: data.latitude || data.coords.latitude,
+        longitude: data.longitude || data.coords.longitude
       };
       this.connectWS(() => {
         this.stompClient.send('/publish/busposition/' + bus.tripId + '/' + bus.busId, {}, JSON.stringify(position));
@@ -173,10 +183,12 @@ export class HomePage implements AfterViewInit, OnDestroy, OnInit {
     // TODO: how to get nextBusStop on websocket
     if (bus.currentLocation)
       this.getRoutes(bus.currentLocation, bus.nextBusStop.location, '#148d73').then(poly => {
-        this.map.fitBounds(poly.getBounds());
-        let nextBusStopMarker = this.addMarker(bus.nextBusStop.location.latitude, bus.nextBusStop.location.longitude, false, bus.nextBusStop.busStopName);
-        this.markers.stops.push(nextBusStopMarker);
-        this.polylines.current = poly;
+        if (poly) {
+          this.map.fitBounds(poly.getBounds());
+          let nextBusStopMarker = this.addMarker(bus.nextBusStop.location.latitude, bus.nextBusStop.location.longitude, false, bus.nextBusStop.busStopName);
+          this.markers.stops.push(nextBusStopMarker);
+          this.polylines.current = poly;
+        }
       })
 
     // last to current
@@ -212,11 +224,16 @@ export class HomePage implements AfterViewInit, OnDestroy, OnInit {
     // TODO: need real data to test
     let latlng = new (<any>window).L.LatLng(coords.latitude, coords.longitude);
     this.travelledPath.push(latlng);
-    this.map.removeLayer(this.polylines.last);
+    if (this.polylines.last)
+      this.map.removeLayer(this.polylines.last);
     this.polylines.last = this.plotLine(this.travelledPath, 'blue');
+    if (this.polylines.current)
+      this.map.removeLayer(this.polylines.current);
     this.getRoutes(coords, nextBusStop.location, '#148d73').then(poly => {
-      this.map.fitBounds(poly.getBounds());
-      this.polylines.current = poly;
+      if (poly) {
+        this.map.fitBounds(poly.getBounds());
+        this.polylines.current = poly;
+      }
     })
 
     // let decorator = (<any>window).L.PolylineDecorator(this.polylines.current).addTo(this.map);

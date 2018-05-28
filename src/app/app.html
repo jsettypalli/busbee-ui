@@ -7,7 +7,7 @@
 
   <ion-content>
     <ion-list>
-      <button menuClose ion-item *ngFor="let bus of buses" (click)="selectBus(bus)">
+      <button menuClose ion-item *ngFor="let bus of buses; index as i;" (click)="selectBus(i)">
         Bus #{{bus.busId}}
       </button>
       <button menuClose ion-item detail-none (click)="openSettings()">

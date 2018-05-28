@@ -57,6 +57,7 @@ export class UtilsProvider {
 
   decode(encoded) {
     var points = [];
+    var testPoints = [];
     var index = 0, len = encoded.length;
     var lat = 0, lng = 0;
     while (index < len) {
@@ -79,6 +80,12 @@ export class UtilsProvider {
       var dlng = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
       lng += dlng;
       let latlng = new (<any>window).L.LatLng((lat / 1E6), (lng / 1E6));
+      testPoints.push({
+        coords: {
+          latitude: lat / 1E6,
+          longitude: lng / 1E6
+        }
+      });
       points.push(latlng)
     }
     return points

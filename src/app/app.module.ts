@@ -18,6 +18,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { CongnitoProvider } from '../providers/congnito/congnito';
 import { ServerProvider } from '../providers/server/server';
 import { UtilsProvider } from '../providers/utils/utils';
+import { MockDataProvider } from '../providers/mock-data/mock-data';
 
 Pro.init('76fdbaae', {
   appVersion: '0.0.1'
@@ -73,7 +74,8 @@ export class MyErrorHandler implements ErrorHandler {
     Geolocation,
     Push,
     Device,
-    UtilsProvider
+    UtilsProvider,
+    MockDataProvider
   ]
 })
 export class AppModule { }
