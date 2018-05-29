@@ -203,4 +203,12 @@ export class MyApp implements OnInit, AfterViewInit {
       });
     localStorage.registrationId = registration.registrationId;
   }
+
+  changePassword() {
+    let loginModal = this.modalCtrl.create(LoginPage, { view: 'changePassword' });
+    loginModal.onDidDismiss(data => {
+      this.silentLogin();
+    });
+    loginModal.present();
+  }
 }

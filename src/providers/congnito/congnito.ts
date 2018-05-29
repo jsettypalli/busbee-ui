@@ -131,28 +131,38 @@ export class CongnitoProvider {
     }
   }
 
-  changePassword(username, oldPassword, newPassword) {
-    this.getUserPool(username);
-    this.cognitoUser.changePassword(oldPassword, newPassword, function(err, result) {
+  changePassword(oldPassword, newPassword, onSuccess, onFailure) {
+    this.cognitoUser.changePassword(oldPassword, newPassword, (err, result) => {
       if (err) {
         this.utils.ionicMonitoring(err)
-        return;
+        onFailure(err);
+      } else
+        onSuccess(result);
+    });
+  }
+
+  forgotPassword(username, onSuccess, onFailure, requestCode) {
+    this.getUserPool(username);
+    this.cognitoUser.forgotPassword({
+      onSuccess: function(result) {
+        onSuccess(result);
+      },
+      onFailure: function(err) {
+        onFailure(err);
+      },
+      inputVerificationCode() {
+        requestCode();
       }
     });
   }
 
-  forgotPassword() {
-    this.cognitoUser.forgotPassword({
-      onSuccess: function(result) {
-        console.log('call result: ' + result);
+  confirmPassword(verificationCode, newPassword, onSuccess, onFailure) {
+    this.cognitoUser.confirmPassword(verificationCode, newPassword, {
+      onSuccess: function() {
+        onSuccess();
       },
       onFailure: function(err) {
-        alert(err);
-      },
-      inputVerificationCode() {
-        var verificationCode = prompt('Please input verification code ', '');
-        var newPassword = prompt('Enter new password ', '');
-        this.cognitoUser.confirmPassword(verificationCode, newPassword, this);
+        onFailure(err);
       }
     });
   }
