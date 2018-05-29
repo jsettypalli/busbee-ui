@@ -92,7 +92,7 @@ export class MyApp implements OnInit, AfterViewInit {
     this._homePage.clearPolyLines();
     this.server.onGetRunningBuses().then((result: any) => {
       if (this.mockData.useMockData)
-        result = this.mockData.serverResponse;
+        result = this.mockData.serverResponse();
       this.buses = result;
       console.log(result);
       if (!index)
@@ -211,4 +211,26 @@ export class MyApp implements OnInit, AfterViewInit {
     });
     loginModal.present();
   }
+
+
+  mockDriver() {
+    this.mockData.useMockData = true;
+    this.mockData.role = 'DRIVER';
+    this.utils.alert('Mock Data', 'Mocking a DRIVER');
+    this.getBusses();
+  }
+
+  mockParent() {
+    this.mockData.useMockData = true;
+    this.mockData.role = 'PARENT';
+    this.utils.alert('Mock Data', 'Mocking a PARENT');
+    this.getBusses();
+  }
+
+  stopMock() {
+    this.mockData.useMockData = false;
+    this.utils.alert('Mock Data', 'Stop mocking data');
+    this.getBusses();
+  }
+
 }
