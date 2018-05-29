@@ -150,8 +150,7 @@ export class MyApp implements OnInit, AfterViewInit {
             };
             const pushObject: PushObject = this.push.init(options);
             pushObject.on('notification').subscribe((notification: any) => {
-              console.log(notification);
-              this.utils.alert('Notification', notification.message);
+              this.handleNotification(notification);
             });
             pushObject.on('registration').subscribe((registration: any) => {
               this.registerDevice(registration);
@@ -166,6 +165,20 @@ export class MyApp implements OnInit, AfterViewInit {
           this.utils.alert('Push Notification', 'We do not have permission to send push notifications');
         }
       });
+  }
+
+  handleNotification(notification) {
+    console.log(notification);
+    this.utils.alert('Notification', notification.message);
+    if (notification.additionalData) {
+      console.log(notification.additionalData.event);
+      this._homePage.message = notification.additionalData;
+      this._homePage.message.text = notification.message;
+      this._homePage.message.title = notification.title;
+      if (notification.additionalData.event === 'start_bus')
+        this.selectBus(0);
+    }
+
   }
 
   registerDevice(registration) {

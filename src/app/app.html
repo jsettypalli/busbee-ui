@@ -7,9 +7,11 @@
 
   <ion-content>
     <ion-list>
-      <button menuClose ion-item *ngFor="let bus of buses; index as i;" (click)="selectBus(i)">
-        Bus #{{bus.busId}}
-      </button>
+      <ng-container *ngIf="buses.length > 1">
+        <button menuClose ion-item *ngFor="let bus of buses; index as i;" (click)="selectBus(i)">
+          Bus #{{bus.busId}}
+        </button>
+      </ng-container>
       <button menuClose ion-item detail-none (click)="openSettings()">
         <ion-icon name="settings"></ion-icon> Settigs
       </button>

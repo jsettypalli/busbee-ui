@@ -125,7 +125,7 @@ export class MockDataProvider {
       .interval(timeInterval)
       .map(() => {
         return this.travelPoints[index++];
-      }).take(44);
+      }).take(150);
   }
 
 }

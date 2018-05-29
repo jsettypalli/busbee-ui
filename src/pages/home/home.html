@@ -15,17 +15,14 @@
 </ion-content>
 
 
-<ion-footer>
+<ion-footer *ngIf="message">
 
   <div class="alert ">
-       <button class="close" onclick="close()">&times;</button>
-    <img src="../../assets/imgs/user.png" class="user-img">
-
-    <div class="tik">Ramesh<br/>Routh #47<br/>TN-22-AA 2452<br/></div><br/>
-
-    <div class="msg">The bus is 2 stops away and is expected to reach in</div>
-     <div class="min" color="color-3"><strong>10</strong><p>mins</p></div>
-
+       <button class="close" (click)="message = null;">&times;</button>
+    <img src="assets/imgs/user.png" class="user-img">
+    <!-- <div class="tik">Ramesh<br/>Routh #47<br/>TN-22-AA 2452<br/></div><br/> -->
+    <div class="msg">{{message.text}}</div>
+     <div class="min" color="color-3" *ngIf="message.time"><strong>{{message.time | date:'shortTime'}}</strong></div>
 
     </div>
 
