@@ -258,14 +258,15 @@ export class HomePage implements AfterViewInit, OnDestroy, OnInit {
     let latlng = new (<any>window).L.LatLng(coords.latitude, coords.longitude);
     this.travelledPath.push(latlng);
     // redraw lastTravelled line
+    let lastPolyline = this.plotLine(this.travelledPath, 'blue');
     if (this.polylines.last)
       this.map.removeLayer(this.polylines.last);
-    this.polylines.last = this.plotLine(this.travelledPath, 'blue');
+    this.polylines.last = lastPolyline;
     // redraw current line
-    if (this.polylines.current)
-      this.map.removeLayer(this.polylines.current);
     this.getRoutes(coords, nextBusStop.location, '#148d73').then(poly => {
       if (poly) {
+        if (this.polylines.current)
+          this.map.removeLayer(this.polylines.current);
         this.polylines.current = poly;
         if (this.markers.bus)
           this.map.removeLayer(this.markers.bus);
