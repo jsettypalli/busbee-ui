@@ -35,6 +35,7 @@ export class HomePage implements AfterViewInit, OnDestroy, OnInit {
   };
   private travelledPath = [];
   public message;
+  private subscriptions = [];
 
   constructor(
     private server: ServerProvider,
@@ -58,6 +59,7 @@ export class HomePage implements AfterViewInit, OnDestroy, OnInit {
   }
 
   selectBus(bus) {
+    this.closeSubscriptions();
     this.clearPolyLines();
     this.utils.toast('TRIP: ' + bus.tripId + '; BUS: ' + bus.busId + '  ;' + ' Role: ' + bus.role + ' ;');
     // bus not started. TODO: isStarted flag
@@ -75,7 +77,7 @@ export class HomePage implements AfterViewInit, OnDestroy, OnInit {
     } else {
       this.plotRoute(bus);
       this.connectWS(() => {
-        this.stompClient.subscribe('/subscribe/busposition/' + bus.tripId + '/' + bus.busId, (message) => {
+        let busPositionSubscription = this.stompClient.subscribe('/subscribe/busposition/' + bus.tripId + '/' + bus.busId, (message) => {
           console.log(message);
           let data = JSON.parse(message.body);
           if (message.nextBusStop) {
@@ -87,15 +89,23 @@ export class HomePage implements AfterViewInit, OnDestroy, OnInit {
           }
           this.moveBus(location, bus.nextBusStop);
         });
+        this.subscriptions.push(busPositionSubscription);
       }, () => { });
     }
     this.watchToStop(bus);
   }
 
   ngOnDestroy() {
-    this.locationWatch.unsubscribe();
-    this.stompClient.ws.close();
+    this.closeSubscriptions();
+    if (this.wsConnected)
+      this.stompClient.ws.close();
     this.clearPolyLines();
+  }
+
+  closeSubscriptions() {
+    this.subscriptions.forEach(subscription => {
+      subscription.unsubscribe();
+    })
   }
 
   connectWS(onSuccess, onFailure) {
@@ -121,10 +131,11 @@ export class HomePage implements AfterViewInit, OnDestroy, OnInit {
 
   watchToStop(bus) {
     this.connectWS(() => {
-      this.stompClient.subscribe('/subscribe/stop_sending_busposition/' + bus.tripId + '/' + bus.busId, (message) => {
+      let stopPublishSubscription = this.stompClient.subscribe('/subscribe/stop_sending_busposition/' + bus.tripId + '/' + bus.busId, (message) => {
         this.locationWatch.unsubscribe();
         this.stompClient.ws.close();
       });
+      this.subscriptions.push(stopPublishSubscription);
     }, () => { });
   }
 
@@ -146,10 +157,10 @@ export class HomePage implements AfterViewInit, OnDestroy, OnInit {
 
   drive(bus) {
     if (this.mockData.useMockData)
-      this.locationWatch = this.mockData.busPosition;
+      this.locationWatch = this.mockData.watchPosition();
     else
       this.locationWatch = this.geolocation.watchPosition();
-    this.locationWatch.subscribe((data) => {
+    let locationWatchSubscription = this.locationWatch.subscribe((data) => {
       this.moveBus(data.coords, bus.nextBusStop);
       let position = {
         busId: bus.busId,
@@ -163,6 +174,7 @@ export class HomePage implements AfterViewInit, OnDestroy, OnInit {
       this.map.panTo(center);
       this.drivePath.push(center);
     });
+    this.subscriptions.push(locationWatchSubscription);
   }
 
   plotLine(points, color) {
@@ -224,15 +236,20 @@ export class HomePage implements AfterViewInit, OnDestroy, OnInit {
     // TODO: need real data to test
     let latlng = new (<any>window).L.LatLng(coords.latitude, coords.longitude);
     this.travelledPath.push(latlng);
+    // redraw lastTravelled line
     if (this.polylines.last)
       this.map.removeLayer(this.polylines.last);
     this.polylines.last = this.plotLine(this.travelledPath, 'blue');
+    // redraw current line
     if (this.polylines.current)
       this.map.removeLayer(this.polylines.current);
     this.getRoutes(coords, nextBusStop.location, '#148d73').then(poly => {
       if (poly) {
-        this.map.fitBounds(poly.getBounds());
         this.polylines.current = poly;
+        if (this.markers.bus)
+          this.map.removeLayer(this.markers.bus);
+        let busMarker = this.addMarker(coords.latitude, coords.longitude, true);
+        this.markers.bus = busMarker;
       }
     })
 
