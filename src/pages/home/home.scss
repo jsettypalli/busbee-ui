@@ -24,41 +24,56 @@ page-home {
     height:55px;
     float:left;
   }
-  .alert strong{
-    margin-top:-50px;
-    float:right;
-    font-size:35px;
-    color:#FFC300;
-    margin-right:30px;
-  }
-  .alert p{
-    float:right;
+  .alert1 strong{
     margin-top:-30px;
-    font-size:15px;
-    margin-right:-10px;
+    float:right;
+    font-size:30px;
+    font-weight: bold;
     color:#FFC300;
+    margin-right:40px;
   }
-  .alert {
-    position: relative;
+  .alert1 p{
+    float:right;
+    margin-top:-20px;
+    font-size:20px;
+    margin-right:-80px;
+    color:rgb(255, 255, 255);
+  }
+  .alert1 {
+    position:absolute;
     box-sizing: border-box;
     color: white;
     font-size: 1.5em;
     margin: 0 auto;
-    padding: 1em;
+    padding:1em;
     z-index:1;
-    background:rgb(29, 41, 73);
-    width: calc(100% - 0px);
+    background:#ed145c;
+    width: 100%;
+    /*margin-top: 115%;;*/
+    margin-left: -17px;
+    height:120px;
+    bottom:0px;
   }
 
   .tik{
-    font-size: 15px;
-    margin-left: 70px;
+    width: 250px;
+    font-size: 16px;
+    margin-left: 10px;
   }
-
+.tik strong{
+  width: 250px;
+  margin-top: 7px;
+  font-size: 16px;
+  float:right;
+  margin-right: 0px;
+  color:#fff;
+}
   .msg{
     width:250px;
-    color:#aec7ae;
-
+    margin-top:24px;
+    color:#ffffff;
+    font-size: 16px;
+    font-weight: bold;
   }
   button:focus {
     outline: 0;
@@ -72,7 +87,7 @@ page-home {
     background-color: transparent;
     border: none;
     font-size: 2em;
-    color: #ccc;;
+    color: rgb(255, 255, 255);
     cursor: pointer;
     &:hover {
       color: inherit;
@@ -103,6 +118,15 @@ page-home {
       color: white;
     }
   }
-
+.user-img{
+  z-index: 1;
+  margin: -10px;
+  height:50px;
+  width:50px;
+}
+.img{
+  height:50px;
+  width:50px;
+}
   }
  

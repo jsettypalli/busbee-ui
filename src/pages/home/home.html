@@ -2,7 +2,7 @@
   <ion-navbar color="default">
 
     <button ion-button menuToggle color="light">
-      <ion-icon name="menu"></ion-icon>
+      <ion-icon name="menu" ></ion-icon>
     </button>
     <ion-icon ios="ios-notifications" md="md-notifications" color="color-3" class="bel"></ion-icon>
 
@@ -12,18 +12,39 @@
 
 <ion-content padding>
   <div id="map" class="map"></div>
+
+
+  <div class="alert1">
+    <ion-fab top left>
+        <button ion-fab large color="light" style="opacity:0.1;" class="img"></button>
+        <ion-fab-list side="right">
+            <div  class="tik">Ramesh Govindarajan Gopalan<br/><strong>Routh #47 - TN-22-AA 2452</strong><br/></div><br/>
+        </ion-fab-list>
+      </ion-fab>
+     <button class="close" onclick="close()">&times;</button>
+  <img src="../../assets/imgs/user.png" class="user-img">
+  
+
+  <div class="tik"></div><br/>
+
+  <div class="msg">The bus is 2 stops away and is expected to reach in</div>
+   <div class="min" color="color-3"><strong>10</strong><p>mins</p></div>
+
+
+  </div>
 </ion-content>
 
-
-<ion-footer *ngIf="message">
-
-  <div class="alert ">
+ 
+<ion-footer >
+<!--
+  <div class="alert" *ngIf="message">
        <button class="close" (click)="message = null;">&times;</button>
     <img src="assets/imgs/user.png" class="user-img">
-    <!-- <div class="tik">Ramesh<br/>Routh #47<br/>TN-22-AA 2452<br/></div><br/> -->
+     
     <div class="msg">{{message.text}}</div>
      <div class="min" color="color-3" *ngIf="message.time"><strong>{{message.time | date:'shortTime'}}</strong></div>
 
     </div>
 
+  -->
 </ion-footer>

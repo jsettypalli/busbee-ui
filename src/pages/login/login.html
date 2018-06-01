@@ -24,7 +24,7 @@
             <div class="wrap-input100 validate-input m-b-23" data-validate="Username is reauired">
               <span class="label-input100 lab">Email / Phone</span>
               <div id="ic">
-                <ion-input class="input100" name="username" type="text" placeholder="Type your username" [(ngModel)]="user"></ion-input>
+                <ion-input class="input100" name="username" type="text" placeholder="Type your Email / Phone" [(ngModel)]="user"></ion-input>
 
                 <ion-icon ios="ios-person" md="md-person" class="ic"></ion-icon>
               </div>
@@ -77,6 +77,9 @@
                 <form (ngSubmit)="setnewPassword()" novalidate>
                   <button class="login100-form-btn ">
                 Set Password
+              </button>
+              <button class="login100-form-btn ">
+                Back
               </button>
                 </form>
               </div>
