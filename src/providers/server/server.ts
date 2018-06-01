@@ -64,4 +64,24 @@ export class ServerProvider {
     });
   }
 
+  saveSettings(minutes, enabled) {
+    return this.http.request('post', this.url + '/app/settings_notification', {
+      headers: {
+        'Authorization': 'Bearer ' + this.cognito.tokens.idToken.jwtToken
+      },
+      params: {
+        minutes: minutes,
+        enabled: enabled
+      }
+    })
+  }
+
+  getSettings() {
+    return this.http.get(this.url + '/app/settings_notification', {
+      headers: {
+        'Authorization': 'Bearer ' + this.cognito.tokens.idToken.jwtToken
+      }
+    })
+  }
+
 }

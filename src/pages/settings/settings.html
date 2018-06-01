@@ -23,31 +23,15 @@
   <ion-list>
     <ion-label color="light">
       <h2>The Notify me when bus is</h2> </ion-label>
-    <ion-item class="toggle tg">
-      <ion-label color="light">15 min away</ion-label>
-      <ion-toggle [(ngModel)]="setting1" color="color-1"></ion-toggle>
+    <ion-item class="toggle tg" *ngFor="let item of notifications">
+      <ion-label color="light" *ngIf="item.notificationMinutes">{{item.notificationMinutes}} minutes away</ion-label>
+      <ion-label color="light" *ngIf="!item.notificationMinutes">On arrival</ion-label>
+      <ion-toggle [(ngModel)]="item.enabled" color="color-1" (ngModelChange)="saveSettings(item.notificationMinutes, item.enabled)"></ion-toggle>
     </ion-item>
-    <br/>
-    <ion-item class="toggle tg">
-      <ion-label color="light">10 min away</ion-label>
-      <ion-toggle [(ngModel)]="setting2" color="color-1"></ion-toggle>
-    </ion-item>
-    <br/>
-    <ion-item class="toggle tg">
-      <ion-label color="light">5 min away</ion-label>
-      <ion-toggle [(ngModel)]="setting3" color="color-1"></ion-toggle>
-    </ion-item>
-    <br/>
-    <ion-item class="toggle tg">
-      <ion-label color="light">On arrival</ion-label>
-      <ion-toggle [(ngModel)]="setting4" color="color-1"></ion-toggle>
-    </ion-item>
-    <br/>
-
   </ion-list>
 
 
-  <button ion-button block (click)="save()" color="default" class="back">Back</button>
+  <button ion-button block (click)="close()" color="default">Close Settings</button>
 
 
 </ion-content>
