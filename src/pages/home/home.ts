@@ -59,6 +59,7 @@ export class HomePage implements AfterViewInit, OnDestroy, OnInit {
   }
 
   selectBus(bus) {
+    this.travelledPath = [];
     this.bus = bus;
     this.closeSubscriptions();
     this.clearPolyLines();
@@ -78,27 +79,42 @@ export class HomePage implements AfterViewInit, OnDestroy, OnInit {
     } else {
       this.plotRoute();
       this.connectWS(() => {
-        let busPositionSubscription = this.stompClient.subscribe('/subscribe/busposition/' + this.bus.tripId + '/' + this.bus.busId, (message) => {
-          console.log(message);
-          let data = JSON.parse(message.body);
-          if (message.next_bus_stop_latitude) {
-            this.bus.nextBusStop = {
-              location: {
-                latitude: message.next_bus_stop_latitude,
-                longitude: message.next_bus_stop_longitude
-              }
-            };
+        let busPositionSubscription
+        try {
+          busPositionSubscription = this.listenBusPosition();
+        } catch (err) {
+          this.utils.alert('Bus Position Subscription - Retry', err.message);
+          // re try
+          try {
+            busPositionSubscription = this.listenBusPosition();
+          } catch (err) {
+            this.utils.alert('Bus Position Subscription - Abort', err.message);
           }
-          let location = {
-            latitude: data.latitude,
-            longitude: data.longitude
-          }
-          this.moveBus(location, this.bus.nextBusStop);
-        });
+        }
         this.subscriptions.push(busPositionSubscription);
       }, () => { });
     }
     this.watchToStop();
+  }
+
+  listenBusPosition() {
+    return this.stompClient.subscribe('/subscribe/busposition/' + this.bus.tripId + '/' + this.bus.busId, (message) => {
+      console.log(message);
+      let data = JSON.parse(message.body);
+      if (message.next_bus_stop_latitude) {
+        this.bus.nextBusStop = {
+          location: {
+            latitude: message.next_bus_stop_latitude,
+            longitude: message.next_bus_stop_longitude
+          }
+        };
+      }
+      let location = {
+        latitude: data.latitude,
+        longitude: data.longitude
+      }
+      this.moveBus(location, this.bus.nextBusStop);
+    });
   }
 
   ngOnDestroy() {
@@ -142,8 +158,12 @@ export class HomePage implements AfterViewInit, OnDestroy, OnInit {
           location: {
             latitude: message.next_bus_stop_latitude,
             longitude: message.next_bus_stop_longitude
-          }
+          },
+          busStopDetailsId: message.next_bus_stop_id
         }
+        this.prevToNext();
+      }, err => {
+        this.utils.alert('Next Bus Stop Subscription', err.message);
       });
       this.subscriptions.push(nextBusStopSubscription);
     }, () => { });
@@ -156,14 +176,16 @@ export class HomePage implements AfterViewInit, OnDestroy, OnInit {
         this.stompClient.ws.close();
       });
       this.subscriptions.push(stopPublishSubscription);
-    }, () => { });
+    }, err => {
+      this.utils.alert('Stop Sending Subscription', err.message);
+    });
   }
 
   addMarker(lat, lng, isBus?, title?) {
     var w = 40,
       h = 50;
     let icon = (<any>window).L.icon({
-      iconUrl: isBus ? 'assets/imgs/bus.png' : 'assets/imgs/marker.png',
+      iconUrl: isBus ? 'assets/imgs/marker.png' : 'assets/imgs/LOGOFINAL-01.png',
       iconAnchor: [w / 2, h / 2], //Handles the marker anchor point. For a correct anchor point [ImageWidth/2,ImageHeight/2]
       iconSize: [w, h]
     })
@@ -193,6 +215,8 @@ export class HomePage implements AfterViewInit, OnDestroy, OnInit {
       var center = new (<any>window).L.LatLng(data.coords.latitude, data.coords.longitude);
       this.map.panTo(center);
       this.drivePath.push(center);
+    }, err => {
+      this.utils.alert('Watch Position', err.message);
     });
     this.watchForNextStop();
     this.subscriptions.push(locationWatchSubscription);
@@ -206,34 +230,36 @@ export class HomePage implements AfterViewInit, OnDestroy, OnInit {
   }
 
   plotRoute() {
+    // New Strategy - routing from server
+    // if (this.bus.nextBusStop) {
+    //   this.server.getRoutingById(this.bus.tripId, this.bus.busId, this.bus.nextBusStop.busStopDetailsId).subscribe(route => {
+    //     let coords = this.utils.decode(route[0].pts);
+    //     console.log('Routing Info', coords);
+    //   }, err => {
+    //     this.utils.alert('Ger Route Error', err.message);
+    //   })
+    // }
     if (this.bus.currentLocation) {
       let busMarker = this.addMarker(this.bus.currentLocation.latitude, this.bus.currentLocation.longitude, true);
       this.markers.bus = busMarker;
       var center = new (<any>window).L.LatLng(this.bus.currentLocation.latitude, this.bus.currentLocation.longitude);
       this.map.panTo(center);
     }
-    // current to next
-    // TODO: how to get nextBusStop on websocket
-    if (this.bus.currentLocation)
-      this.getRoutes(this.bus.currentLocation, this.bus.nextBusStop.location, '#148d73').then(poly => {
-        if (poly) {
-          this.map.fitBounds(poly.getBounds());
-          let nextBusStopMarker = this.addMarker(this.bus.nextBusStop.location.latitude, this.bus.nextBusStop.location.longitude, false, this.bus.nextBusStop.busStopName);
-          this.markers.stops.push(nextBusStopMarker);
-          this.polylines.current = poly;
-        }
-      })
+    // previous to next
+    if (this.bus.nextBusStop)
+      this.prevToNext();
 
-    // last to current
-    if (this.bus.visitedBusStops && this.bus.visitedBusStops.length) {
-      let last = this.bus.visitedBusStops[this.bus.visitedBusStops.length - 1];
-      let lastBusStopMarker = this.addMarker(last.location.latitude, last.location.longitude, false, last.busStopName);
+    // TODO: last to current
+    if (this.bus.prevBusStop) {
+      this.mockData.previousBusStop = this.bus.prevBusStop.location;
+      let lastBusStopMarker = this.addMarker(this.bus.prevBusStop.location.latitude, this.bus.prevBusStop.location.longitude, false, this.bus.prevBusStop.busStopName);
       this.markers.stops.push(lastBusStopMarker);
-      this.getRoutes(last.location, this.bus.currentLocation, 'blue', true).then(poly => {
-        this.polylines.last = poly;
-      })
+      // this.getRoutes(last.location, this.bus.currentLocation, 'blue', true).then(poly => {
+      //   this.polylines.last = poly;
+      // })
     }
-    // previous
+
+    // visitedBusStops
     if (this.bus.visitedBusStops && this.bus.visitedBusStops.length > 1) {
       let first = this.bus.visitedBusStops[0];
       let firstBusStopMarker = this.addMarker(first.location.latitude, first.location.longitude, false, first.busStopName);
@@ -245,12 +271,24 @@ export class HomePage implements AfterViewInit, OnDestroy, OnInit {
           let stop = this.bus.visitedBusStops[i + 1];
           let busStopMarker = this.addMarker(stop.location.latitude, stop.location.longitude, false, stop.busStopName);
           this.markers.stops.push(busStopMarker);
-          this.getRoutes(stop.location, start.location, 'blue').then(poly => {
+          this.getRoutes(stop.busStopDetailsId, 'blue').then(poly => {
             this.polylines.previous.push(poly);
           })
         }
       };
     }
+  }
+
+  prevToNext() {
+    this.getRoutes(this.bus.nextBusStop.busStopDetailsId, '#148d73').then(poly => {
+      if (poly) {
+        this.map.fitBounds(poly.getBounds());
+        let nextBusStopMarker = this.addMarker(this.bus.nextBusStop.location.latitude, this.bus.nextBusStop.location.longitude, false, this.bus.nextBusStop.busStopName);
+        this.mockData.nextBusStop = this.bus.nextBusStop.location;
+        this.markers.stops.push(nextBusStopMarker);
+        this.polylines.current = poly;
+      }
+    })
   }
 
   moveBus(coords, nextBusStop) {
@@ -262,18 +300,23 @@ export class HomePage implements AfterViewInit, OnDestroy, OnInit {
     if (this.polylines.last)
       this.map.removeLayer(this.polylines.last);
     this.polylines.last = lastPolyline;
+    if (this.markers.bus)
+      this.map.removeLayer(this.markers.bus);
+    let busMarker = this.addMarker(coords.latitude, coords.longitude, true);
+    this.markers.bus = busMarker;
+
     // redraw current line
-    this.getRoutes(coords, nextBusStop.location, '#148d73').then(poly => {
-      if (poly) {
-        if (this.polylines.current)
-          this.map.removeLayer(this.polylines.current);
-        this.polylines.current = poly;
-        if (this.markers.bus)
-          this.map.removeLayer(this.markers.bus);
-        let busMarker = this.addMarker(coords.latitude, coords.longitude, true);
-        this.markers.bus = busMarker;
-      }
-    })
+    // this.getRoutes(coords, nextBusStop.location, '#148d73').then(poly => {
+    //   if (poly) {
+    //     if (this.polylines.current)
+    //       this.map.removeLayer(this.polylines.current);
+    //     this.polylines.current = poly;
+    //     if (this.markers.bus)
+    //       this.map.removeLayer(this.markers.bus);
+    //     let busMarker = this.addMarker(coords.latitude, coords.longitude, true);
+    //     this.markers.bus = busMarker;
+    //   }
+    // })
 
     // let decorator = (<any>window).L.PolylineDecorator(this.polylines.current).addTo(this.map);
     // let offset = 0;
@@ -315,13 +358,15 @@ export class HomePage implements AfterViewInit, OnDestroy, OnInit {
       this.markers.stops.forEach(stopMarket => this.map.removeLayer(stopMarket));
   }
 
-  getRoutes(start, stop, color, isLastTravelled?) {
-    return this.server.getRoute(start, stop).toPromise().then((data: any) => {
+  getRoutes(stopId, color, isLastTravelled?) {
+    return this.server.getRoutingById(this.bus.tripId, this.bus.busId, stopId).toPromise().then((data: any) => {
       let points;
-      if (data.results.trips.length)
-        points = this.utils.decode(data.results.trips[0].pts);
+      if (data.length)
+        points = this.utils.decode(data[0].pts);
       if (isLastTravelled)
         this.travelledPath = points;
+      if (color === '#148d73' && this.mockData.useMockData)
+        this.mockData.getTravelPoints(points)
       return this.plotLine(points, color);
     }).catch(error => {
       console.log(error);

@@ -30,11 +30,10 @@
 <ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>
 <page-home></page-home>
 
-<ion-fab right bottom>
-  <button ion-fab mini color="default"><ion-icon name="arrow-dropleft"></ion-icon></button>
+<ion-fab right bottom *ngIf="role === 'DRIVER'">
+  <button ion-fab color="default"><ion-icon name="arrow-dropleft"></ion-icon></button>
   <ion-fab-list side="left">
-    <button ion-fab><ion-icon name="ios-navigate-outline" (click)="mockDriver()"></ion-icon></button>
-    <button ion-fab><ion-icon name="ios-locate-outline" (click)="mockParent()"></ion-icon></button>
-    <button ion-fab><ion-icon name="ios-eye-off-outline" (click)="stopMock()"></ion-icon></button>
+    <button ion-fab *ngIf="!mockData.useMockData"><ion-icon name="ios-navigate-outline" (click)="mockDriver()"></ion-icon></button>
+    <button ion-fab *ngIf="mockData.useMockData"><ion-icon name="ios-eye-off-outline" (click)="stopMock()"></ion-icon></button>
   </ion-fab-list>
 </ion-fab>

@@ -29,6 +29,7 @@ export class MyApp implements OnInit, AfterViewInit {
   rootPage: any;
   pages: Array<{ title: string, component: any }>;
   private buses = [];
+  public role;
 
   constructor(public platform: Platform,
     private statusBar: StatusBar,
@@ -39,7 +40,7 @@ export class MyApp implements OnInit, AfterViewInit {
     private utils: UtilsProvider,
     private device: Device,
     private server: ServerProvider,
-    private mockData: MockDataProvider) {
+    public mockData: MockDataProvider) {
   }
 
   ngOnInit() { }
@@ -91,8 +92,6 @@ export class MyApp implements OnInit, AfterViewInit {
     let selectedTrip = null;
     this._homePage.clearPolyLines();
     this.server.onGetRunningBuses().then((result: any) => {
-      if (this.mockData.useMockData)
-        result = this.mockData.serverResponse();
       this.buses = result;
       console.log(result);
       if (!index)
@@ -100,10 +99,11 @@ export class MyApp implements OnInit, AfterViewInit {
       else
         selectedTrip = result[index];
       this.utils.toast('Role: ' + selectedTrip.role);
+      this.role = selectedTrip.role;
       this._homePage.selectBus(selectedTrip);
     }).catch(err => {
       if (selectedTrip) {
-        this.utils.alert('Map Error', err.message);
+        this.utils.alert('Error', err.message);
         this._homePage.selectBus(selectedTrip);
       }
       else
@@ -178,7 +178,6 @@ export class MyApp implements OnInit, AfterViewInit {
       if (notification.additionalData.event === 'start_bus')
         this.selectBus(0);
     }
-
   }
 
   registerDevice(registration) {
@@ -215,15 +214,7 @@ export class MyApp implements OnInit, AfterViewInit {
 
   mockDriver() {
     this.mockData.useMockData = true;
-    this.mockData.role = 'DRIVER';
     this.utils.alert('Mock Data', 'Mocking a DRIVER');
-    this.getBusses();
-  }
-
-  mockParent() {
-    this.mockData.useMockData = true;
-    this.mockData.role = 'PARENT';
-    this.utils.alert('Mock Data', 'Mocking a PARENT');
     this.getBusses();
   }
 

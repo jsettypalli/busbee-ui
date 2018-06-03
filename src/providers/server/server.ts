@@ -64,6 +64,19 @@ export class ServerProvider {
     });
   }
 
+  getRoutingById(trip_id, vehicle_id, bustStopId) {
+    return this.http.get(this.url + '/app/routes/via_points', {
+      params: {
+        trip_id: trip_id,
+        vehicle_id: vehicle_id,
+        next_bus_stop_id: bustStopId
+      },
+      headers: {
+        'Authorization': 'Bearer ' + this.cognito.tokens.idToken.jwtToken
+      }
+    })
+  }
+
   saveSettings(minutes, enabled) {
     return this.http.request('post', this.url + '/app/settings_notification', {
       headers: {
