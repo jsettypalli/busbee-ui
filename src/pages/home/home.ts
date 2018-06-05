@@ -174,8 +174,7 @@ export class HomePage implements AfterViewInit, OnDestroy, OnInit {
   watchToStop() {
     this.connectWS(() => {
       let stopPublishSubscription = this.stompClient.subscribe('/subscribe/stop_busposition/' + this.bus.tripId + '/' + this.bus.busId, (message) => {
-        this.locationWatch.unsubscribe();
-        this.stompClient.ws.close();
+        this.ngOnDestroy();
       });
       this.subscriptions.push(stopPublishSubscription);
     }, err => {
