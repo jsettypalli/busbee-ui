@@ -101,13 +101,15 @@ export class HomePage implements AfterViewInit, OnDestroy, OnInit {
     return this.stompClient.subscribe('/subscribe/busposition/' + this.bus.tripId + '/' + this.bus.busId, (message) => {
       console.log(message);
       let data = JSON.parse(message.body);
-      if (message.next_bus_stop_latitude) {
+      if (data.next_bus_stop_id != this.bus.nextBusStop.busStopDetailsId) {
         this.bus.nextBusStop = {
           location: {
             latitude: message.next_bus_stop_latitude,
             longitude: message.next_bus_stop_longitude
-          }
-        };
+          },
+          busStopDetailsId: message.next_bus_stop_id
+        }
+        this.prevToNext();
       }
       let location = {
         latitude: data.latitude,

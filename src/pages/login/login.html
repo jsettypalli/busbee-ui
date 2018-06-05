@@ -5,35 +5,35 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-	<header>
-		<a href="#"  class="profile-img-card"><img src="../../assets/imgs//logo.png"></a>
-	</header>
+  <header>
+    <a href="#" class="profile-img-card"><img src="../../assets/imgs//logo.png"></a>
+  </header>
 </ion-header>
 
 <ion-content padding class="cont loginbody">
 
 
- <section class="login-card">
-        <p class="profile-name-card"></p>
-        <form class="form-signin"><span class="reauth-email"> </span>
-              <div id="ic" data-validate="Username is reauired">
-                <ion-input class="input100 form-control" name="username" type="text" placeholder="Type your Email / Phone" [(ngModel)]="user"></ion-input>
+  <section class="login-card">
+    <p class="profile-name-card"></p>
+    <form class="form-signin"><span class="reauth-email"> </span>
+      <div id="ic" data-validate="Username is reauired">
+        <ion-input class="input100 form-control" name="username" type="text" placeholder="Type your Email / Phone" [(ngModel)]="user"></ion-input>
 
-                <ion-icon ios="ios-person" md="md-person" class="ic"></ion-icon>
-              </div>
-           
-            <input class="form-control" type="password" required="" placeholder="Password" id="inputPassword">
-			<div col-md-4 align='center'>
-				<a href="#">Forgot your password?</a>
-			</div>
- 
-            <button class="btn btn-primary btn-block btn-lg btn-signin" type="submit">Sign in</button>
-        </form>
-        <div class="row">
-           <p class="pull-right">Powered by <a href="#">JS Technologies</a></p>
-            
-        </div>
-    </section>
+        <ion-icon ios="ios-person" md="md-person" class="ic"></ion-icon>
+      </div>
+
+      <input class="form-control" type="password" required="" placeholder="Password" id="inputPassword" [(ngModel)]="password" name="password">
+      <div col-md-4 align='center'>
+        <a href="#">Forgot your password?</a>
+      </div>
+
+      <button class="btn btn-primary btn-block btn-lg btn-signin" type="submit" (click)="signIn()">Sign in</button>
+    </form>
+    <div class="row">
+      <p class="pull-right">Powered by <a href="#">JS Technologies</a></p>
+
+    </div>
+  </section>
 
 
 
@@ -104,7 +104,7 @@
                   <button class="login100-form-btn ">
                 Set Password
               </button>
-              <button class="login100-form-btn ">
+                  <button class="login100-form-btn ">
                 Back
               </button>
                 </form>

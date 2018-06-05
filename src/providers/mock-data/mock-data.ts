@@ -31,7 +31,7 @@ export class MockDataProvider {
   }
 
   watchPosition() {
-    let timeInterval = 5000; // 5 sec
+    let timeInterval = 2000; // 2 sec
     let index = -1;
     return Observable
       .interval(timeInterval)
