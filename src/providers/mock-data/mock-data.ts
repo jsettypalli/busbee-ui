@@ -52,8 +52,8 @@ export class MockDataProvider {
           return this.travelPoints[index];
         if (index !== -1 && !this.travelPoints[index] && this.nextBusStop) {
           if (index > this.travelPoints.length) {
-            this.nextBusStop.latitude = this.nextBusStop.latitude + 0.0001;
-            this.nextBusStop.longitude = this.nextBusStop.longitude + 0.0001;
+            this.nextBusStop.latitude = Number(this.nextBusStop.latitude) + 0.0001;
+            this.nextBusStop.longitude = Number(this.nextBusStop.longitude) + 0.0001;
           }
           return {
             coords: {
