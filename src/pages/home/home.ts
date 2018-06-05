@@ -295,17 +295,20 @@ export class HomePage implements AfterViewInit, OnDestroy, OnInit {
 
   moveBus(coords, nextBusStop) {
     // TODO: need real data to test
-    let latlng = new (<any>window).L.LatLng(coords.latitude, coords.longitude);
-    this.travelledPath.push(latlng);
-    // redraw lastTravelled line
-    let lastPolyline = this.plotLine(this.travelledPath, 'blue');
-    if (this.polylines.last)
-      this.map.removeLayer(this.polylines.last);
-    this.polylines.last = lastPolyline;
-    if (this.markers.bus)
-      this.map.removeLayer(this.markers.bus);
-    let busMarker = this.addMarker(coords.latitude, coords.longitude, true);
-    this.markers.bus = busMarker;
+    if (coords.latitude) {
+      let latlng = new (<any>window).L.LatLng(coords.latitude, coords.longitude);
+      this.travelledPath.push(latlng);
+      // redraw lastTravelled line
+      let lastPolyline = this.plotLine(this.travelledPath, 'blue');
+      if (this.polylines.last)
+        this.map.removeLayer(this.polylines.last);
+      this.polylines.last = lastPolyline;
+      if (this.markers.bus)
+        this.map.removeLayer(this.markers.bus);
+      let busMarker = this.addMarker(coords.latitude, coords.longitude, true);
+      this.markers.bus = busMarker;
+    }
+
 
     // redraw current line
     // this.getRoutes(coords, nextBusStop.location, '#148d73').then(poly => {

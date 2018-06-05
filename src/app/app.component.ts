@@ -93,14 +93,18 @@ export class MyApp implements OnInit, AfterViewInit {
     this._homePage.clearPolyLines();
     this.server.onGetRunningBuses().then((result: any) => {
       this.buses = result;
-      console.log(result);
-      if (!index)
-        selectedTrip = result[0];
-      else
-        selectedTrip = result[index];
-      this.utils.toast('Role: ' + selectedTrip.role);
-      this.role = selectedTrip.role;
-      this._homePage.selectBus(selectedTrip);
+      if (this.buses.length) {
+        console.log(result);
+        if (!index)
+          selectedTrip = result[0];
+        else
+          selectedTrip = result[index];
+        this.utils.toast('Role: ' + selectedTrip.role);
+        this.role = selectedTrip.role;
+        this._homePage.selectBus(selectedTrip);
+      } else {
+        // TODO: no bus running
+      }
     }).catch(err => {
       if (selectedTrip) {
         this.utils.alert('Error', err.message);
@@ -196,7 +200,7 @@ export class MyApp implements OnInit, AfterViewInit {
     }
     if (isReplace)
       this.server.registerDevice(deviceDetails, isReplace).subscribe(data => {
-        this.utils.toast('Device registered');
+        this.utils.alert('Device registered', this.device.uuid);
       }, error => {
         this.utils.alert('Device Registration Error', error.message);
       });
