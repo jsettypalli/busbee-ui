@@ -99,15 +99,14 @@ export class HomePage implements AfterViewInit, OnDestroy, OnInit {
 
   listenBusPosition() {
     return this.stompClient.subscribe('/subscribe/busposition/' + this.bus.tripId + '/' + this.bus.busId, (message) => {
-      console.log(message);
       let data = JSON.parse(message.body);
       if (data.next_bus_stop_id != this.bus.nextBusStop.busStopDetailsId) {
         this.bus.nextBusStop = {
           location: {
-            latitude: message.next_bus_stop_latitude,
-            longitude: message.next_bus_stop_longitude
+            latitude: data.next_bus_stop_latitude,
+            longitude: data.next_bus_stop_longitude
           },
-          busStopDetailsId: message.next_bus_stop_id
+          busStopDetailsId: data.next_bus_stop_id
         }
         this.prevToNext();
       }
@@ -156,12 +155,13 @@ export class HomePage implements AfterViewInit, OnDestroy, OnInit {
   watchForNextStop() {
     this.connectWS(() => {
       let nextBusStopSubscription = this.stompClient.subscribe('/subscribe/next_busstop_location/' + this.bus.tripId + '/' + this.bus.busId, (message) => {
+        let data = JSON.parse(message.body);
         this.bus.nextBusStop = {
           location: {
-            latitude: message.next_bus_stop_latitude,
-            longitude: message.next_bus_stop_longitude
+            latitude: data.next_bus_stop_latitude,
+            longitude: data.next_bus_stop_longitude
           },
-          busStopDetailsId: message.next_bus_stop_id
+          busStopDetailsId: data.next_bus_stop_id
         }
         this.prevToNext();
       }, err => {
