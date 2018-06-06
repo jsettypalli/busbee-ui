@@ -115,11 +115,11 @@ export class HomePage implements AfterViewInit, OnDestroy, OnInit {
         }
         this.prevToNext();
       }
-      this.currentLocation = {
+      let location = {
         latitude: data.latitude,
         longitude: data.longitude
       };
-      this.moveBus(this.currentLocation, this.bus.nextBusStop);
+      this.moveBus(location, this.bus.nextBusStop);
     });
   }
 
@@ -134,7 +134,8 @@ export class HomePage implements AfterViewInit, OnDestroy, OnInit {
 
   closeSubscriptions() {
     this.subscriptions.forEach(subscription => {
-      subscription.unsubscribe();
+      if (subscription)
+        subscription.unsubscribe();
     })
   }
 
@@ -290,6 +291,11 @@ export class HomePage implements AfterViewInit, OnDestroy, OnInit {
 
   moveBus(coords, nextBusStop) {
     if (coords.latitude) {
+      // let angle = this.utils.angle(this.currentLocation.latitude, this.currentLocation.longitude, coords.latitude, coords.longitude);
+      this.currentLocation = {
+        latitude: coords.latitude,
+        longitude: coords.longitude
+      };
       let latlng = new (<any>window).L.LatLng(coords.latitude, coords.longitude);
       this.travelledPath.push(latlng);
       // redraw lastTravelled line
