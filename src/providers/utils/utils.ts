@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AlertController, LoadingController, ToastController } from 'ionic-angular';
-import { Pro } from '@ionic/pro';
 
 /*
   Generated class for the UtilsProvider provider.
@@ -17,7 +16,6 @@ export class UtilsProvider {
     private alertCtrl: AlertController,
     private toastController: ToastController,
     private loadingCtrl: LoadingController) {
-    console.log('Hello UtilsProvider Provider');
   }
 
   alert(title, subTitle, button?) {
@@ -36,10 +34,6 @@ export class UtilsProvider {
       showCloseButton: showButton ? showButton : false
     });
     toast.present();
-  }
-
-  ionicMonitoring(err) {
-    Pro.monitoring.exception(err);
   }
 
   presentLoading(msg) {

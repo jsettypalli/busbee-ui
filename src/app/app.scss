@@ -17,3 +17,131 @@
 .toolbar-md-default .bar-button-default-md, .toolbar-md-default .bar-button-clear-md-default, .toolbar-md-default .bar-button-md-default{
   color: white !important;
 }
+
+$colors: (
+  default: rgb(0, 255, 170)
+  );
+
+.bel{
+  margin-right:10px;
+  margin-top:10px;
+  font-size:35px;
+  float:right;
+}
+.map {
+  margin: -5%;
+  padding: 0;
+  width: 110%;
+  height: 130%;
+  z-index: -1;
+  position: absolute;
+}
+.user-img{
+  margin-top: 0px;
+  height:55px;
+  float:left;
+}
+.alert1 strong{
+  margin-top:-30px;
+  float:right;
+  font-size:30px;
+  font-weight: bold;
+  color:#FFC300;
+  margin-right:40px;
+}
+.alert1 p{
+  float:right;
+  margin-top:-20px;
+  font-size:20px;
+  margin-right:-80px;
+  color:rgb(255, 255, 255);
+}
+.alert1 {
+  position:absolute;
+  box-sizing: border-box;
+  color: white;
+  font-size: 1.5em;
+  margin: 0 auto;
+  padding:1em;
+  z-index:1;
+  background:#ed145c;
+  width: 100%;
+  /*margin-top: 115%;;*/
+  margin-left: -17px;
+  height:120px;
+  bottom:0px;
+}
+
+.tik{
+  width: 250px;
+  font-size: 16px;
+  margin-left: 10px;
+}
+.tik strong{
+width: 250px;
+margin-top: 7px;
+font-size: 16px;
+float:right;
+margin-right: 0px;
+color:#fff;
+}
+.msg{
+  width:250px;
+  margin-top:24px;
+  color:#ffffff;
+  font-size: 16px;
+  font-weight: bold;
+}
+button:focus {
+  outline: 0;
+}
+
+.close {
+  position: absolute;
+  top: 15%;
+  right: 1%;
+  transform: translateY(-50%);
+  background-color: transparent;
+  border: none;
+  font-size: 2em;
+  color: rgb(255, 255, 255);
+  cursor: pointer;
+  &:hover {
+    color: inherit;
+  }
+
+}
+
+.btn {
+  border-radius: 5px;
+  border: solid 1px #000000;
+  box-sizing: border-box;
+  cursor: pointer;
+  font-size: 1.5em;
+  text-align: center;
+  margin: 0 auto;
+  margin-bottom: 1em;
+  padding: 1em;
+  width: 40%;
+}
+
+.reset {
+  background-color: transparent;
+  border: solid 3px #ccc;
+  color: #ccc;
+  transition: background-color 0.5s linear 0.1s;
+  &:hover {
+    background-color: #ccc;
+    color: white;
+  }
+}
+.user-img{
+z-index: 1;
+margin: -10px;
+height:50px;
+width:50px;
+}
+.img{
+height:50px;
+width:50px;
+}

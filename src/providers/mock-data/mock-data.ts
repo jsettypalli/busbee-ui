@@ -13,7 +13,20 @@ export class MockDataProvider {
   public useMockData = false;
   private travelPoints = [];
   public previousBusStop;
-  public nextBusStop
+  public nextBusStop;
+  public notificationMessage = {
+    show: true,
+    title: null,
+    text: 'Your stop is next in the route and is expected to reach in 4mins from now.',
+    short_message: 'Your stop is next in the route.',
+    time: null,
+    expected_time: 4,
+    driver_name: 'Ramesh',
+    driver_thumbnail_url: null,
+    driver_image_url: null,
+    bus_number: 'K3',
+    registration_number: 'TS 08 1456'
+  };
 
   constructor() {
   }

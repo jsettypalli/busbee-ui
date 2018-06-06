@@ -42,7 +42,6 @@ export class SettingsPage implements OnInit {
 
   ngOnInit() {
     this.server.getSettings().subscribe((settings: any) => {
-      console.log(settings);
       settings.forEach(setting => {
         if (setting.enabled) {
           let enabledMin = this.notifications.find(item => item.notificationMinutes === setting.notificationMinutes);
@@ -56,14 +55,12 @@ export class SettingsPage implements OnInit {
 
   saveSettings(minutes, enabled) {
     this.server.saveSettings(minutes, enabled).subscribe(data => {
-      console.log(data);
     }, (err) => {
       this.utils.alert('Save Settings Error', err.message)
     });
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad SettingsPage');
   }
 
   close() {

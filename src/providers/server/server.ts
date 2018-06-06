@@ -12,24 +12,13 @@ import { CongnitoProvider } from '../congnito/congnito';
 export class ServerProvider {
 
   public map;
-  // private busNotify = new Subject<any>();
-  // busNotifyObservable = this.busNotify.asObservable();
   private url = 'http://52.66.155.37:8080';
   public runningBusses = [];
 
   constructor(private http: HttpClient, private cognito: CongnitoProvider) {
   }
 
-  // public notifyBus(bus) {
-  //   this.busNotify.next(bus);
-  // }
-
   onGetRunningBuses() {
-    // this.http.get('http://52.66.155.37:8080/temp/load_running_buses_data', {
-    //   headers: {
-    //     'Authorization': 'Bearer ' + this.cognito.tokens.idToken.jwtToken
-    //   }
-    // }).subscribe(data => console.log(data));
     return this.http.get(this.url + '/app/get_running_buses', {
       headers: {
         'Authorization': 'Bearer ' + this.cognito.tokens.idToken.jwtToken

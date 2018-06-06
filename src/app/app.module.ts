@@ -1,6 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
-import { Pro } from '@ionic/pro';
 import { ErrorHandler, Injectable, Injector, NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { Push } from '@ionic-native/push';
@@ -20,10 +19,6 @@ import { ServerProvider } from '../providers/server/server';
 import { UtilsProvider } from '../providers/utils/utils';
 import { MockDataProvider } from '../providers/mock-data/mock-data';
 
-Pro.init('76fdbaae', {
-  appVersion: '0.0.1'
-})
-
 @Injectable()
 export class MyErrorHandler implements ErrorHandler {
   ionicErrorHandler: IonicErrorHandler;
@@ -38,7 +33,6 @@ export class MyErrorHandler implements ErrorHandler {
   }
 
   handleError(err: any): void {
-    Pro.monitoring.handleNewError(err);
     // Remove this if you want to disable Ionic's auto exception handling
     // in development mode.
     this.ionicErrorHandler && this.ionicErrorHandler.handleError(err);

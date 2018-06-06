@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, OnDestroy, OnInit } from '@angular/core';
+import { Component, AfterViewInit, OnDestroy, OnInit, Output, EventEmitter } from '@angular/core';
 import { ServerProvider } from '../../providers/server/server';
 import { Geolocation } from '@ionic-native/geolocation';
 import { UtilsProvider } from '../../providers/utils/utils';
@@ -12,6 +12,9 @@ import * as SockJS from 'sockjs-client';
   templateUrl: 'home.html'
 })
 export class HomePage implements AfterViewInit, OnDestroy, OnInit {
+  @Output() notification = new EventEmitter<any>();
+  @Output() isBusMoving = new EventEmitter<boolean>();
+
   MapmyIndia: any;
   private map;
   private bus;
@@ -21,7 +24,7 @@ export class HomePage implements AfterViewInit, OnDestroy, OnInit {
   private serverUrl = 'http://52.66.155.37:8080/transportws';
   private wsConnected = false;
   private polylines = {
-    current: null,
+    current: [],
     last: null,
     previous: []
   };
@@ -34,8 +37,8 @@ export class HomePage implements AfterViewInit, OnDestroy, OnInit {
     longitude: 0
   };
   private travelledPath = [];
-  public message;
   private subscriptions = [];
+  private busIsMoving = false;
 
   constructor(
     private server: ServerProvider,
@@ -43,9 +46,9 @@ export class HomePage implements AfterViewInit, OnDestroy, OnInit {
     private utils: UtilsProvider,
     private mockData: MockDataProvider) {
     this.MapmyIndia = (<any>window).MapmyIndia;
-    this.geolocation.getCurrentPosition().then(data => {
-      this.currentLocation = data.coords;
-    })
+    // this.geolocation.getCurrentPosition().then(data => {
+    //   this.currentLocation = data.coords;
+    // })
   }
 
   ngOnInit() {
@@ -64,14 +67,12 @@ export class HomePage implements AfterViewInit, OnDestroy, OnInit {
     this.closeSubscriptions();
     this.clearPolyLines();
     this.utils.toast('TRIP: ' + this.bus.tripId + '; BUS: ' + this.bus.busId + '  ;' + ' Role: ' + this.bus.role + ' ;');
-    // this.bus not started. TODO: isStarted flag
     if (!this.bus.inTransit) {
-      this.message = {
-        text: 'The bus #' + this.bus.busId + ' is scheduled to start at ',
+      this.notification.emit({
+        text: 'The bus #' + this.bus.busId + ' is scheduled to start',
         time: this.bus.startDateTime
-      }
+      });
       this.utils.alert('Bus not started', 'The bus #' + this.bus.busId + ' is scheduled to start at ' + new Date(this.bus.startDateTime))
-      // TODO: switch to active mode. how to?
     }
     if (this.bus.role === 'DRIVER') {
       this.plotRoute();
@@ -99,6 +100,10 @@ export class HomePage implements AfterViewInit, OnDestroy, OnInit {
 
   listenBusPosition() {
     return this.stompClient.subscribe('/subscribe/busposition/' + this.bus.tripId + '/' + this.bus.busId, (message) => {
+      if (this.busIsMoving !== true) {
+        this.busIsMoving = true;
+        this.isBusMoving.emit(true);
+      }
       let data = JSON.parse(message.body);
       if (data.next_bus_stop_id != this.bus.nextBusStop.busStopDetailsId) {
         this.bus.nextBusStop = {
@@ -110,15 +115,17 @@ export class HomePage implements AfterViewInit, OnDestroy, OnInit {
         }
         this.prevToNext();
       }
-      let location = {
+      this.currentLocation = {
         latitude: data.latitude,
         longitude: data.longitude
-      }
-      this.moveBus(location, this.bus.nextBusStop);
+      };
+      this.moveBus(this.currentLocation, this.bus.nextBusStop);
     });
   }
 
   ngOnDestroy() {
+    this.busIsMoving = false;
+    this.isBusMoving.emit(false);
     this.closeSubscriptions();
     if (this.wsConnected)
       this.stompClient.ws.close();
@@ -140,7 +147,6 @@ export class HomePage implements AfterViewInit, OnDestroy, OnInit {
       this.stompClient = Stomp.over(ws);
       let that = this;
       this.stompClient.connect({}, function(frame) {
-        console.log(frame);
         that.wsConnected = true;
         onSuccess();
       }, function(error) {
@@ -175,6 +181,10 @@ export class HomePage implements AfterViewInit, OnDestroy, OnInit {
     this.connectWS(() => {
       let stopPublishSubscription = this.stompClient.subscribe('/subscribe/stop_busposition/' + this.bus.tripId + '/' + this.bus.busId, (message) => {
         this.ngOnDestroy();
+        this.utils.alert('Trip Complete', 'The trip has completed');
+        this.notification.emit({
+          text: 'The trip has completed'
+        });
       });
       this.subscriptions.push(stopPublishSubscription);
     }, err => {
@@ -231,15 +241,6 @@ export class HomePage implements AfterViewInit, OnDestroy, OnInit {
   }
 
   plotRoute() {
-    // New Strategy - routing from server
-    // if (this.bus.nextBusStop) {
-    //   this.server.getRoutingById(this.bus.tripId, this.bus.busId, this.bus.nextBusStop.busStopDetailsId).subscribe(route => {
-    //     let coords = this.utils.decode(route[0].pts);
-    //     console.log('Routing Info', coords);
-    //   }, err => {
-    //     this.utils.alert('Ger Route Error', err.message);
-    //   })
-    // }
     if (this.bus.currentLocation) {
       let busMarker = this.addMarker(this.bus.currentLocation.latitude, this.bus.currentLocation.longitude, true);
       this.markers.bus = busMarker;
@@ -250,14 +251,10 @@ export class HomePage implements AfterViewInit, OnDestroy, OnInit {
     if (this.bus.nextBusStop)
       this.prevToNext();
 
-    // TODO: last to current
     if (this.bus.prevBusStop) {
       this.mockData.previousBusStop = this.bus.prevBusStop.location;
       let lastBusStopMarker = this.addMarker(this.bus.prevBusStop.location.latitude, this.bus.prevBusStop.location.longitude, false, this.bus.prevBusStop.busStopName);
       this.markers.stops.push(lastBusStopMarker);
-      // this.getRoutes(last.location, this.bus.currentLocation, 'blue', true).then(poly => {
-      //   this.polylines.last = poly;
-      // })
     }
 
     // visitedBusStops
@@ -268,7 +265,6 @@ export class HomePage implements AfterViewInit, OnDestroy, OnInit {
       for (let key in this.bus.visitedBusStops) {
         let i = parseInt(key);
         if (i !== (this.bus.visitedBusStops.length - 1)) {
-          let start = this.bus.visitedBusStops[i];
           let stop = this.bus.visitedBusStops[i + 1];
           let busStopMarker = this.addMarker(stop.location.latitude, stop.location.longitude, false, stop.busStopName);
           this.markers.stops.push(busStopMarker);
@@ -287,13 +283,12 @@ export class HomePage implements AfterViewInit, OnDestroy, OnInit {
         let nextBusStopMarker = this.addMarker(this.bus.nextBusStop.location.latitude, this.bus.nextBusStop.location.longitude, false, this.bus.nextBusStop.busStopName);
         this.mockData.nextBusStop = this.bus.nextBusStop.location;
         this.markers.stops.push(nextBusStopMarker);
-        this.polylines.current = poly;
+        this.polylines.current.push(poly);
       }
     })
   }
 
   moveBus(coords, nextBusStop) {
-    // TODO: need real data to test
     if (coords.latitude) {
       let latlng = new (<any>window).L.LatLng(coords.latitude, coords.longitude);
       this.travelledPath.push(latlng);
@@ -307,51 +302,11 @@ export class HomePage implements AfterViewInit, OnDestroy, OnInit {
       let busMarker = this.addMarker(coords.latitude, coords.longitude, true);
       this.markers.bus = busMarker;
     }
-
-
-    // redraw current line
-    // this.getRoutes(coords, nextBusStop.location, '#148d73').then(poly => {
-    //   if (poly) {
-    //     if (this.polylines.current)
-    //       this.map.removeLayer(this.polylines.current);
-    //     this.polylines.current = poly;
-    //     if (this.markers.bus)
-    //       this.map.removeLayer(this.markers.bus);
-    //     let busMarker = this.addMarker(coords.latitude, coords.longitude, true);
-    //     this.markers.bus = busMarker;
-    //   }
-    // })
-
-    // let decorator = (<any>window).L.PolylineDecorator(this.polylines.current).addTo(this.map);
-    // let offset = 0;
-    // var w = 40,
-    //   h = 50;
-    // //offset and repeat can be each defined as a number,in pixels,or in percentage of the line's length,as a string
-    // window.setInterval(function() {
-    //   decorator.setPatterns([{
-    //     offset: offset + '%', //Offset value for first pattern symbol,from the start point of the line. Default is 0.
-    //     repeat: 0, //repeat pattern at every x offset. 0 means no repeat.
-    //     //Symbol type.
-    //     symbol: (<any>window).L.Symbol.marker({
-    //       rotate: true, //move marker along the line. false value may cause the custom marker to shift away from a curved polyline. Default is false.
-    //       markerOptions: {
-    //         icon: (<any>window).L.icon({
-    //           iconUrl: 'this.bus.png',
-    //           iconAnchor: [w / 2, h / 2], //Handles the marker anchor point. For a correct anchor point [ImageWidth/2,ImageHeight/2]
-    //           iconSize: [w, h]
-    //         })
-    //       }
-    //     })
-    //   }]);
-    //   if ((offset += 0.03) > 100) //Sets offset. Smaller the value smoother the movement.
-    //     offset = 0;
-    // }, 30); //Time in ms. Increases/decreases the speed of the marker movement on decrement/increment of 1 respectively. values should not be less than 1.
-
   }
 
   clearPolyLines() {
-    if (this.polylines.current)
-      this.map.removeLayer(this.polylines.current);
+    if (this.polylines.current.length)
+      this.polylines.current.forEach(poly => this.map.removeLayer(poly));
     if (this.polylines.last)
       this.map.removeLayer(this.polylines.last);
     if (this.polylines.previous.length)
@@ -373,9 +328,13 @@ export class HomePage implements AfterViewInit, OnDestroy, OnInit {
         this.mockData.getTravelPoints(points)
       return this.plotLine(points, color);
     }).catch(error => {
-      console.log(error);
       this.utils.alert('Map Routing error', error.message);
     });
+  }
+
+  reCenter() {
+    var center = new (<any>window).L.LatLng(this.currentLocation.latitude, this.currentLocation.longitude);
+    this.map.panTo(center);
   }
 
 }

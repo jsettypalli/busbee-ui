@@ -36,7 +36,7 @@ export class CongnitoProvider {
 
     this.userPool.signUp(user, password, phoneAtt, null, ((err, result) => {
       if (err) {
-        this.utils.ionicMonitoring(err)
+        this.utils.alert('Sign Up Error', err.message)
       }
     }))
   }
@@ -47,17 +47,17 @@ export class CongnitoProvider {
     this.getUserPool(username);
     this.cognitoUser.confirmRegistration(code, true, (err, result) => {
       if (err) {
-        this.utils.ionicMonitoring(err)
+        this.utils.alert('Confirm User Error', err.message)
       }
     })
   }
 
   resendConfirmationCode(username: string) {
     this.getUserPool(username);
+    let that = this;
     this.cognitoUser.resendConfirmationCode(function(err, result) {
       if (err) {
-        alert(err);
-        this.utils.ionicMonitoring(err)
+        that.utils.alert('Confirmation Code Error', err.message)
         return;
       }
     });
@@ -86,10 +86,8 @@ export class CongnitoProvider {
         onSuccess(result);
       },
       onFailure: (err) => {
-        this.utils.ionicMonitoring(err)
         onFailure(err);
       },
-      // TODO: Test with new user accounts
       newPasswordRequired: (userAttributes, requiredAttributes) => {
         onNewPassword(userAttributes);
       }
@@ -105,7 +103,6 @@ export class CongnitoProvider {
         onSuccess(result);
       },
       onFailure: (err) => {
-        this.utils.ionicMonitoring(err)
         onFailure(err);
       }
     });
@@ -134,7 +131,6 @@ export class CongnitoProvider {
   changePassword(oldPassword, newPassword, onSuccess, onFailure) {
     this.cognitoUser.changePassword(oldPassword, newPassword, (err, result) => {
       if (err) {
-        this.utils.ionicMonitoring(err)
         onFailure(err);
       } else
         onSuccess(result);

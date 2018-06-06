@@ -16,12 +16,6 @@ export class LoginPage {
   private userAttributes;
   public view = 'login';
   public verificationCode;
-  // {
-  //   login: true,
-  //   newPassword: false,
-  //   forgotPassword: false,
-  //   changePassword: false
-  // }
 
   constructor(private congnitoProvider: CongnitoProvider,
     private utils: UtilsProvider,
@@ -33,7 +27,6 @@ export class LoginPage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad LoginPage');
   }
 
   signIn() {
@@ -72,7 +65,6 @@ export class LoginPage {
 
   forgetPassword() {
     this.congnitoProvider.forgotPassword(this.user, (result) => {
-      console.log('forgetPassword', result);
       this.view = 'login';
     }, this.onFailedLogin.bind(this), () => {
       this.view = 'verificationCode';
@@ -81,14 +73,12 @@ export class LoginPage {
 
   confirmPassword() {
     this.congnitoProvider.confirmPassword(this.verificationCode, this.password, () => {
-      console.log('confirmPassword');
       this.view = 'login';
     }, this.onFailedLogin.bind(this))
   }
 
   changePassword() {
     this.congnitoProvider.changePassword(this.password, this.newPassword, (result) => {
-      console.log('changePassword', result);
       this.password = null;
       this.view = 'login';
     }, this.onFailedLogin.bind(this))

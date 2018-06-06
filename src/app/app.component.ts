@@ -1,5 +1,5 @@
 import { Component, ViewChild, OnInit, AfterViewInit } from '@angular/core';
-import { Nav, Platform } from 'ionic-angular';
+import { Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { ModalController } from 'ionic-angular';
@@ -18,7 +18,6 @@ import { MockDataProvider } from '../providers/mock-data/mock-data';
   templateUrl: 'app.html'
 })
 export class MyApp implements OnInit, AfterViewInit {
-  // @ViewChild(Nav) nav: Nav;
   private _homePage;
   @ViewChild(HomePage)
   set homePage(homePage: HomePage) {
@@ -30,6 +29,8 @@ export class MyApp implements OnInit, AfterViewInit {
   pages: Array<{ title: string, component: any }>;
   private buses = [];
   public role;
+  public message: any;
+  public isBusMoving: boolean;
 
   constructor(public platform: Platform,
     private statusBar: StatusBar,
@@ -43,18 +44,23 @@ export class MyApp implements OnInit, AfterViewInit {
     public mockData: MockDataProvider) {
   }
 
-  ngOnInit() { }
+  ngOnInit() {
+    // TODO: remove mock data
+    this.message = this.mockData.notificationMessage
+  }
 
   ngAfterViewInit() { }
 
   initialize() {
     this.platform.ready().then(() => {
-      this.getPushToken();
       this.statusBar.styleDefault();
-      // this.nav.setRoot(HomePage);
       this.silentLogin();
       this._homePage.bus = null;
     });
+  }
+
+  onBusMoving(isBusMoving) {
+    this.isBusMoving = isBusMoving
   }
 
   silentLogin() {
@@ -63,6 +69,7 @@ export class MyApp implements OnInit, AfterViewInit {
     }
     else {
       this.congnito.localLogin((result) => {
+        this.getPushToken();
         this.splashScreen.hide();
         localStorage.isLoggedIn = true;
         this.utils.toast('Logged in as ' + result.idToken.payload.email);
@@ -94,7 +101,6 @@ export class MyApp implements OnInit, AfterViewInit {
     this.server.onGetRunningBuses().then((result: any) => {
       this.buses = result;
       if (this.buses.length) {
-        console.log(result);
         if (!index)
           selectedTrip = result[0];
         else
@@ -103,7 +109,9 @@ export class MyApp implements OnInit, AfterViewInit {
         this.role = selectedTrip.role;
         this._homePage.selectBus(selectedTrip);
       } else {
-        // TODO: no bus running
+        this.onNotification({
+          text: 'No bus is scheduled to run for the rest of the day.'
+        });
       }
     }).catch(err => {
       if (selectedTrip) {
@@ -161,7 +169,6 @@ export class MyApp implements OnInit, AfterViewInit {
             });
             pushObject.on('error').subscribe(error => {
               this.utils.alert('Error with Push plugin', error.message);
-              this.utils.ionicMonitoring(error);
             });
           });
 
@@ -172,21 +179,15 @@ export class MyApp implements OnInit, AfterViewInit {
   }
 
   handleNotification(notification) {
-    console.log(notification);
     this.utils.alert('Notification', notification.message);
     if (notification.additionalData) {
-      console.log(notification.additionalData.event);
-      this._homePage.message = notification.additionalData;
-      this._homePage.message.text = notification.message;
-      this._homePage.message.title = notification.title;
+      this.onNotification(notification.additionalData);
       if (notification.additionalData.event === 'start_bus')
         this.selectBus(0);
     }
   }
 
   registerDevice(registration) {
-    console.log('Device registered', registration);
-    console.log(this.device);
     let deviceDetails = {
       platform: this.device.platform.toLowerCase(),
       device_id: this.device.uuid,
@@ -200,7 +201,6 @@ export class MyApp implements OnInit, AfterViewInit {
     }
     if (isReplace)
       this.server.registerDevice(deviceDetails, isReplace).subscribe(data => {
-        this.utils.alert('Device registered', this.device.uuid);
       }, error => {
         this.utils.alert('Device Registration Error', error.message);
       });
@@ -226,6 +226,15 @@ export class MyApp implements OnInit, AfterViewInit {
     this.mockData.useMockData = false;
     this.utils.alert('Mock Data', 'Stop mocking data');
     this.getBusses();
+  }
+
+  onNotification(message) {
+    this.message = message;
+    this.message.show = true;
+  }
+
+  locateBus() {
+    this._homePage.reCenter();
   }
 
 }

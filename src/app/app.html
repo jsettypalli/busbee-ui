@@ -28,7 +28,37 @@
 
 <!-- Disable swipe-to-go-back because it's poor UX to combine STGB with side menus -->
 <ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>
-<page-home></page-home>
+<ion-header>
+  <ion-navbar color="default">
+
+    <button ion-button menuToggle color="light">
+      <ion-icon name="menu" ></ion-icon>
+    </button>
+    <ion-icon name="ios-notifications" color="color-3" class="bel" (click)="message.show = true;"></ion-icon>
+    <ion-icon name="ios-refresh-circle-outline" color="color-3" class="bel" *ngIf="!isBusMoving" (click)="getBusses()"></ion-icon>
+    <ion-icon name="ios-locate-outline" color="color-3" class="bel" *ngIf="isBusMoving" (click)="locateBus()"></ion-icon>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <page-home (notification)="onNotification($event)" (isBusMoving)="onBusMoving($event)"></page-home>
+</ion-content>
+
+<ion-footer>
+  <div class="alert1" *ngIf="message.show && message.text">
+    <div class="tik" *ngIf="message.driver_name">{{message.driver_name}}<br/>
+      <strong *ngIf="message.bus_number">Bus #{{message.bus_number}} - {{message.registration_number}}</strong><br/></div><br/>
+    <button class="close" (click)="message.show = false;">&times;</button>
+    <img [src]="message.driver_thumbnail_url || 'assets/imgs/user.png'" class="user-img" *ngIf="message.driver_name">
+    <div class="tik"></div><br/>
+    <div class="msg">{{message.short_message || message.text}}</div>
+    <div class="min" color="color-3" *ngIf="message.expected_time"><strong>{{message.expected_time | date:'mm'}}</strong>
+      <p>mins</p>
+    </div>
+    <div class="min" color="color-3" *ngIf="message.time"><strong>{{message.time | date:'shortTime'}}</strong>
+    </div>
+  </div>
+</ion-footer>
 
 <ion-fab right bottom *ngIf="role === 'DRIVER'">
   <button ion-fab color="default"><ion-icon name="arrow-dropleft"></ion-icon></button>
