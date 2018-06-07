@@ -1,3 +1,10 @@
+
+
+
+
+
+
+
 <ion-menu [content]="content">
   <ion-header>
     <ion-toolbar>
@@ -45,18 +52,26 @@
 </ion-content>
 
 <ion-footer>
-  <div class="alert1" *ngIf="message.show && message.text">
-    <div class="tik" *ngIf="message.driver_name">{{message.driver_name}}<br/>
-      <strong *ngIf="message.bus_number">Bus #{{message.bus_number}} - {{message.registration_number}}</strong><br/></div><br/>
-    <button class="close" (click)="message.show = false;">&times;</button>
-    <img [src]="message.driver_thumbnail_url || 'assets/imgs/user.png'" class="user-img" *ngIf="message.driver_name">
-    <div class="tik"></div><br/>
-    <div class="msg">{{message.short_message || message.text}}</div>
-    <div class="min" color="color-3" *ngIf="message.expected_time"><strong>{{message.expected_time | date:'mm'}}</strong>
-      <p>mins</p>
-    </div>
-    <div class="min" color="color-3" *ngIf="message.time"><strong>{{message.time | date:'shortTime'}}</strong>
-    </div>
+
+  <div  *ngIf="message.show && message.text">
+
+      <div class="user_push">
+          <div class="close_n" (click)="message.show = false;"><img src="assets/imgs/close.png" alt=""></div>
+          <div class="client"> <img [src]="message.driver_thumbnail_url || 'assets/imgs/client.jpg'" *ngIf="message.driver_name">	</div>
+          <div class="details">
+            <span>
+              <p *ngIf="message.driver_name">{{message.driver_name}}</p>
+              <p> Route No: <b *ngIf="message.bus_number">{{message.bus_number}} </b></p>
+            </span>
+            <p>Vehicle No: {{message.registration_number}} </p>
+          </div>
+          <div class="comments">
+            <p> {{message.short_message || message.text}} </p>
+            <h1 *ngIf="message.expected_time" > {{message.expected_time | date:'mm'}}</h1> <span class="minutes">mins</span>
+            <h2 *ngIf="message.time" > {{message.time | date:'shortTime'}} </h2>
+          </div>	
+      </div>
+
   </div>
 </ion-footer>
 
