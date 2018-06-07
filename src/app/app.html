@@ -1,34 +1,33 @@
-
-
-
-
-
-
-
 <ion-menu [content]="content">
-  <ion-header>
-    <ion-toolbar>
+  <ion-header color="dark">
+    <ion-toolbar color="default">
       <ion-title>Menu</ion-title>
     </ion-toolbar>
   </ion-header>
 
   <ion-content>
-    <ion-list>
+    <ion-list >
       <ng-container *ngIf="buses.length > 1">
         <button menuClose ion-item *ngFor="let bus of buses; index as i;" (click)="selectBus(i)">
           Bus #{{bus.busId}}
         </button>
       </ng-container>
-      <button menuClose ion-item detail-none (click)="openSettings()">
-        <ion-icon name="settings"></ion-icon> Settigs
+      <div class="home border_btm">
+          <div class="menubranding"> <img src="assets/imgs/logo1.png" width="50%" style="text-align: center"></div>
+      <button class="icon-left ion-home" menuClose ion-item detail-none (click)="openSettings()">
+        <ion-icon name="settings"></ion-icon> Settings
       </button>
-      <button menuClose ion-item detail-none (click)="logout()">
+      <button class="button button-assertive" menuClose ion-item detail-none (click)="logout()">
         <ion-icon name="log-out"></ion-icon>  Logout
       </button>
-      <button menuClose ion-item detail-none (click)="changePassword()">
-        <ion-icon name="ios-finger-print"></ion-icon>  Change Password
+      <button class="button button-assertive" menuClose ion-item detail-none (click)="changePassword()">
+       <ion-icon name="create"></ion-icon> Change Password
       </button>
+    </div>
+
+    <p class="home"> Lorem ipusm. Lorem ipusm. Lorem ipusm. Lorem ipusm..</p> 
     </ion-list>
+    
   </ion-content>
 
 </ion-menu>
@@ -52,9 +51,7 @@
 </ion-content>
 
 <ion-footer>
-
   <div  *ngIf="message.show && message.text">
-
       <div class="user_push">
           <div class="close_n" (click)="message.show = false;"><img src="assets/imgs/close.png" alt=""></div>
           <div class="client"> <img [src]="message.driver_thumbnail_url || 'assets/imgs/client.jpg'" *ngIf="message.driver_name">	</div>
@@ -71,7 +68,6 @@
             <h2 *ngIf="message.time" > {{message.time | date:'shortTime'}} </h2>
           </div>	
       </div>
-
   </div>
 </ion-footer>
 

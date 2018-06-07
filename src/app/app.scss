@@ -222,3 +222,30 @@ font-weight: 600;
 .comments .minutes {margin-top: 15px;
 float: left;
 font-size: 14px;}
+
+
+.home {
+  background-image:url(../../assets/imgs/sub_d.jpg);
+  background-position: right;
+  background-size: cover;
+  background-repeat: no-repeat;
+  width:100%;
+  
+
+}
+
+p.home {padding:20px;}
+.border_btm {border-bottom: 1px solid #fff;}
+
+.scroll-content {background-color: #eb145b}
+
+.item-md {background-color: #eb145b; color:#ffffff;}
+
+ion-footer {bottom:-18px !important;}
+
+.menubranding {width: 81%;
+  height: 150px;
+  text-align: center;
+  padding-top: 21px;
+  padding-left: 58px;
+}
