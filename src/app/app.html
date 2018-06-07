@@ -1,6 +1,6 @@
 <ion-menu [content]="content">
-  <ion-header color="dark">
-    <ion-toolbar color="default">
+  <ion-header color="primary">
+    <ion-toolbar color="Oliver-base">
       <ion-title>Menu</ion-title>
     </ion-toolbar>
   </ion-header>
@@ -35,14 +35,14 @@
 <!-- Disable swipe-to-go-back because it's poor UX to combine STGB with side menus -->
 <ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>
 <ion-header>
-  <ion-navbar color="default">
+  <ion-navbar color="Oliver-base">
 
-    <button ion-button menuToggle color="light">
-      <ion-icon name="menu" ></ion-icon>
+    <button  ion-button menuToggle color="light" >
+      <ion-icon style="zoom:1.5;"  name="menu" ></ion-icon>
     </button>
-    <ion-icon name="ios-notifications" color="color-3" class="bel" (click)="message.show = true;"></ion-icon>
-    <ion-icon name="ios-refresh-circle-outline" color="color-3" class="bel" *ngIf="!isBusMoving" (click)="getBusses()"></ion-icon>
-    <ion-icon name="ios-locate-outline" color="color-3" class="bel" *ngIf="isBusMoving" (click)="locateBus()"></ion-icon>
+    <ion-icon name="ios-notifications" color="light" class="bel" (click)="message.show = true;"></ion-icon>
+    <ion-icon name="ios-refresh-circle-outline" color="light" class="bel" *ngIf="!isBusMoving" (click)="getBusses()"></ion-icon>
+    <ion-icon name="ios-locate-outline" color="light" class="bel" *ngIf="isBusMoving" (click)="locateBus()"></ion-icon>
   </ion-navbar>
 </ion-header>
 

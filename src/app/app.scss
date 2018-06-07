@@ -239,7 +239,7 @@ p.home {padding:20px;}
 
 .scroll-content {background-color: #eb145b}
 
-.item-md {background-color: #eb145b; color:#ffffff;}
+.item-md {background-color: #FEE88B; color:#eb145b;}
 
 ion-footer {bottom:-18px !important;}
 
@@ -249,3 +249,7 @@ ion-footer {bottom:-18px !important;}
   padding-top: 21px;
   padding-left: 58px;
 }
+
+.list-md .item-block .item-inner {border:0px !important;}
+
+.toolbar-md-Oliver-base .bar-button-default-md, .toolbar-md-Oliver-base .bar-button-clear-md-default, .toolbar-md-Oliver-base .bar-button-md-default {color:#fff;}
