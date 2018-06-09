@@ -197,7 +197,7 @@ export class HomePage implements AfterViewInit, OnDestroy, OnInit {
     var w = 40,
       h = 50;
     let icon = (<any>window).L.icon({
-      iconUrl: isBus ? 'assets/imgs/marker.png' : 'assets/imgs/LOGOFINAL-01.png',
+      iconUrl: isBus ? 'assets/imgs/bus-icon.png' : 'assets/imgs/stopMarker.png',
       iconAnchor: [w / 2, h / 2], //Handles the marker anchor point. For a correct anchor point [ImageWidth/2,ImageHeight/2]
       iconSize: [w, h]
     })

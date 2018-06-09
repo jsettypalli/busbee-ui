@@ -1,11 +1,11 @@
     /* ======== IMPORT FONT ========== */
-    
+
     @import url(http://fonts.googleapis.com/css?family=Roboto:400,300,700,900);
     @import url(http://fonts.googleapis.com/css?family=Raleway:900,300,700);
     /* ======== BOOTSTRAP STYLE ========= */
-    
+
 	 /* ======== Google STYLE ========= */
-	
+
 	.login-card {
     max-width: 375px;
     padding: 20px 40px;
@@ -17,7 +17,7 @@ body {    background-color: #eb145b;}
 a.profile-img-card {
 background-size:cover;
     display: block;
-background-image: url(../../assets/imgs/banner.jpg); 
+background-image: url(assets/imgs/banner.jpg); 
 
 }
 
@@ -47,9 +47,9 @@ a.profile-img-card img {
 
     background-color: none;
     background-image: none;
-    border-bottom: 1px solid #fff !important;	
+    border-bottom: 1px solid #fff !important;
     border-radius: 0px;
-	
+
 }
 
 
@@ -77,9 +77,9 @@ a.profile-img-card img {
 }
 
 .login-card .form-signin .login-form-control:focus {
-	  
+
 	  border-bottom:1px solid #fff !important;
-	
+
 }
 
 .login-card .btn.btn-signin {
@@ -108,7 +108,7 @@ a.profile-img-card img {
 .form-signin a, .form-signin a:hover{
      color: #fff !important;
 	 text-align:center;
-	 
+
 }
 
 .login-card .forgot-password:hover,
@@ -117,18 +117,18 @@ a.profile-img-card img {
       color: #fff !important;
 	  border-bottom:1px solid #fff;
 }
-	
+
 	.login-form-control:focus {
     /* border-color: #66afe9; */
     outline: 0;
-     -webkit-box-shadow:none; 
-    box-shadow:none; 
+     -webkit-box-shadow:none;
+    box-shadow:none;
 }
-	
- 
+
+
     /*
     FORM*/
-    
+
     .login-form-control {
         height: 38px;
         padding: 6px 12px;
@@ -137,21 +137,18 @@ a.profile-img-card img {
         color: #fff;
         /*background-color: #000000;*/
         background-image: none;
-   
+
 
     }
-  
+
     /* ======== GENERAL ========== */
-    
+
     *,
     *:hover,
     *:focus,
     *:active {
         outline: 0;
     }
-    
+
     .text-input {background: transparent !important;}
     .btn {width:100% !important;}
-  
-    
-   
