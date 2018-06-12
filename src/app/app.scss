@@ -145,3 +145,111 @@ width:50px;
 height:50px;
 width:50px;
 }
+
+
+.notifi {
+width: 100%;
+height: 38%;
+display: block;
+background-color: #000000;position: absolute;
+bottom: 0%;
+}
+.user_push {
+width: 100%;
+margin-top: -130px;
+float: left;
+display: block;
+background-color:#eb145b;
+padding-bottom: 8px
+}
+.close_n {
+  position: relative;
+float: right;
+margin-top: -48px;
+}
+.client {
+width: 59px;
+height:59px;
+border-top-left-radius: 0px;
+border-top-right-radius: 50px;
+border-bottom-right-radius: 50px;
+border-bottom-left-radius: 50px;
+float: left;
+background-repeat:no-repeat;
+background-position: center;
+background-image: url(assets/imgs/client.jpg);
+margin-top: 8px;
+margin-left: 5px;
+}
+.details {
+ width:70%;
+float: left;
+margin-top: 10px;
+padding-left: 17px;	    padding-bottom: 15px;
+}
+.details p{
+/*float:right;*/margin: 0px 0 0 0px;color:#fff;    font-size: 99%;
+}
+.details span{
+   width: 47%;
+float: left;
+border: 0px solid #f00;
+}
+.details span p{
+margin:3;    font-size: 99%;
+color:#fff;    float: left;
+}
+.details b{
+color:#fea503;
+}
+.comments {
+color:#fff;width: 100%;float: left; border: 0px solid #baff07;
+}
+.comments p {
+  width: 53%;
+    float: left;
+    font-size: 99%;
+    margin: 4px 0 0 8px;
+    font-weight: bold;
+}
+.comments h1{
+color: #ffffff;
+margin: 1% 2px 0 9%;
+float: left;
+font-weight: 600;
+}
+
+.comments .minutes {margin-top: 15px;
+float: left;
+font-size: 14px;}
+
+
+.home {
+  background-image:url(assets/imgs/sub_d.jpg);
+  background-position: right;
+  background-size: cover;
+  background-repeat: no-repeat;
+  width:100%;
+
+
+}
+
+p.home {padding:20px;}
+.border_btm {border-bottom: 1px solid #fff;}
+
+.scroll-content {background-color: #eb145b}
+
+.item-md {background-color: #FEE88B; color:#eb145b;}
+
+ion-footer {bottom:-18px !important;}
+
+.menubranding {width: 81%;
+  height: 150px;
+  text-align: center;
+  padding-top: 21px;
+  padding-left: 58px;
+}
+
+.list-md .item-block .item-inner {border:0px !important;}
+
+.toolbar-md-Oliver-base .bar-button-default-md, .toolbar-md-Oliver-base .bar-button-clear-md-default, .toolbar-md-Oliver-base .bar-button-md-default {color:#fff;}
