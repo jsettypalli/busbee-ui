@@ -25,9 +25,9 @@
       </button>
     </div>
 
-    <p class="home"> Lorem ipusm. Lorem ipusm. Lorem ipusm. Lorem ipusm..</p> 
+    <p class="home"> Lorem ipusm. Lorem ipusm. Lorem ipusm. Lorem ipusm..</p>
     </ion-list>
-    
+
   </ion-content>
 
 </ion-menu>
@@ -51,22 +51,22 @@
 </ion-content>
 
 <ion-footer>
-  <div  *ngIf="message.show && message.text">
+  <div  *ngIf="message && message.show && (message.text || message.short_message)">
       <div class="user_push">
           <div class="close_n" (click)="message.show = false;"><img src="assets/imgs/close.png" alt=""></div>
-          <div class="client"> <img [src]="message.driver_thumbnail_url || 'assets/imgs/client.jpg'" *ngIf="message.driver_name">	</div>
-          <div class="details">
+          <div class="client" (click)="showDriverImage()"> <img [src]="message.driver_thumbnail_url || 'assets/imgs/client.jpg'" *ngIf="message.driver_name">	</div>
+          <div class="details" *ngIf="message.driver_name">
             <span>
               <p *ngIf="message.driver_name">{{message.driver_name}}</p>
-              <p> Route No: <b *ngIf="message.bus_number">{{message.bus_number}} </b></p>
+              <p *ngIf="message.bus_number"> Route No: <b>{{message.bus_number}} </b></p>
             </span>
-            <p>Vehicle No: {{message.registration_number}} </p>
+            <p *ngIf="message.registration_number">Vehicle No: {{message.registration_number}} </p>
           </div>
           <div class="comments">
             <p> {{message.short_message || message.text}} </p>
-            <h1 *ngIf="message.expected_time" > {{message.expected_time | date:'mm'}}</h1> <span class="minutes">mins</span>
+            <h1 *ngIf="message.expected_time" > {{message.expected_time}}</h1> <span class="minutes" *ngIf="message.expected_time">mins</span>
             <h2 *ngIf="message.time" > {{message.time | date:'shortTime'}} </h2>
-          </div>	
+          </div>
       </div>
   </div>
 </ion-footer>
