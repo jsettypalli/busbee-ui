@@ -68,11 +68,16 @@ export class HomePage implements AfterViewInit, OnDestroy, OnInit {
     this.clearPolyLines();
     this.utils.toast('TRIP: ' + this.bus.tripId + '; BUS: ' + this.bus.busId + '  ;' + ' Role: ' + this.bus.role + ' ;');
     if (!this.bus.inTransit) {
-      this.notification.emit({
-        text: 'The bus #' + this.bus.busId + ' is scheduled to start',
-        time: this.bus.startDateTime
-      });
-      this.utils.alert('Bus not started', 'The bus #' + this.bus.busId + ' is scheduled to start at ' + new Date(this.bus.startDateTime))
+      if (this.bus.startDateTime)
+        this.notification.emit({
+          text: 'The bus #' + this.bus.busId + ' is scheduled to start',
+          time: this.bus.startDateTime
+        });
+      else
+        this.notification.emit({
+          text: 'Bus is not running now',
+        });
+      // this.utils.alert('Bus not started', 'The bus #' + this.bus.busId + ' is scheduled to start at ' + new Date(this.bus.startDateTime))
     }
     if (this.bus.role === 'DRIVER') {
       this.plotRoute();

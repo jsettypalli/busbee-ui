@@ -11,6 +11,7 @@ import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { SettingsPage } from '../pages/settings/settings';
 import { LoginPage } from '../pages/login/login';
+import { PhotoPage } from '../pages/photo/photo';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -44,7 +45,8 @@ export class MyErrorHandler implements ErrorHandler {
     MyApp,
     HomePage,
     LoginPage,
-    SettingsPage
+    SettingsPage,
+    PhotoPage
   ],
   imports: [
     BrowserModule,
@@ -56,7 +58,8 @@ export class MyErrorHandler implements ErrorHandler {
     MyApp,
     HomePage,
     SettingsPage,
-    LoginPage
+    LoginPage,
+    PhotoPage
   ],
   providers: [
     StatusBar,

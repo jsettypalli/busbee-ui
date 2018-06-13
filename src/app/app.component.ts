@@ -47,7 +47,7 @@ export class MyApp implements OnInit, AfterViewInit {
 
   ngOnInit() {
     // TODO: remove mock data
-    this.message = this.mockData.notificationMessage
+    // this.message = this.mockData.notificationMessage
   }
 
   ngAfterViewInit() { }
@@ -180,7 +180,7 @@ export class MyApp implements OnInit, AfterViewInit {
   }
 
   handleNotification(notification) {
-    this.utils.alert('Notification', notification.message);
+    // this.utils.alert('Notification', notification.message);
     if (notification.additionalData) {
       this.onNotification(notification.additionalData);
       if (notification.additionalData.event === 'start_bus')
