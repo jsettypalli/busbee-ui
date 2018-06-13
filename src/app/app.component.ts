@@ -8,6 +8,7 @@ import { Device } from '@ionic-native/device';
 
 import { HomePage } from '../pages/home/home';
 import { LoginPage } from '../pages/login/login';
+import { PhotoPage } from '../pages/photo/photo';
 import { CongnitoProvider } from '../providers/congnito/congnito';
 import { SettingsPage } from '../pages/settings/settings';
 import { UtilsProvider } from '../providers/utils/utils';
@@ -235,6 +236,13 @@ export class MyApp implements OnInit, AfterViewInit {
 
   locateBus() {
     this._homePage.reCenter();
+  }
+
+  showDriverImage() {
+    if (this.message.driver_image_url) {
+      let photoModal = this.modalCtrl.create(PhotoPage, { imageUrl: this.message.driver_image_url });
+      photoModal.present();
+    }
   }
 
 }

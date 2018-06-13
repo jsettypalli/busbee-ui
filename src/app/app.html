@@ -25,9 +25,9 @@
       </button>
     </div>
 
-    <p class="home"> Lorem ipusm. Lorem ipusm. Lorem ipusm. Lorem ipusm..</p> 
+    <p class="home"> Lorem ipusm. Lorem ipusm. Lorem ipusm. Lorem ipusm..</p>
     </ion-list>
-    
+
   </ion-content>
 
 </ion-menu>
@@ -54,7 +54,7 @@
   <div  *ngIf="message.show && message.text">
       <div class="user_push">
           <div class="close_n" (click)="message.show = false;"><img src="assets/imgs/close.png" alt=""></div>
-          <div class="client"> <img [src]="message.driver_thumbnail_url || 'assets/imgs/client.jpg'" *ngIf="message.driver_name">	</div>
+          <div class="client" (click)="showDriverImage()"> <img [src]="message.driver_thumbnail_url || 'assets/imgs/client.jpg'" *ngIf="message.driver_name">	</div>
           <div class="details">
             <span>
               <p *ngIf="message.driver_name">{{message.driver_name}}</p>
@@ -66,7 +66,7 @@
             <p> {{message.short_message || message.text}} </p>
             <h1 *ngIf="message.expected_time" > {{message.expected_time | date:'mm'}}</h1> <span class="minutes">mins</span>
             <h2 *ngIf="message.time" > {{message.time | date:'shortTime'}} </h2>
-          </div>	
+          </div>
       </div>
   </div>
 </ion-footer>
