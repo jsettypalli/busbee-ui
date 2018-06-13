@@ -55,7 +55,7 @@
       <div class="user_push">
           <div class="close_n" (click)="message.show = false;"><img src="assets/imgs/close.png" alt=""></div>
           <div class="client" (click)="showDriverImage()"> <img [src]="message.driver_thumbnail_url || 'assets/imgs/client.jpg'" *ngIf="message.driver_name">	</div>
-          <div class="details" *ngIf="message.driver_name">
+          <div class="details">
             <span>
               <p *ngIf="message.driver_name">{{message.driver_name}}</p>
               <p *ngIf="message.bus_number"> Route No: <b>{{message.bus_number}} </b></p>

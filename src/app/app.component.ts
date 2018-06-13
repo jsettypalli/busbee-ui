@@ -231,6 +231,10 @@ export class MyApp implements OnInit, AfterViewInit {
 
   onNotification(message) {
     this.message = message;
+    if (this.message.driver_image_url)
+      this.message.driver_image_url = this.server.url + this.message.driver_image_url;
+    if (this.message.driver_thumbnail_url)
+      this.message.driver_thumbnail_url = this.server.url + this.message.driver_thumbnail_url;
     this.message.show = true;
   }
 
