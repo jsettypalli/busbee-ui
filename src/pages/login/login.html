@@ -74,7 +74,7 @@
         <div class="cng">
             <a href="#" class="profile-img-card"><img src="assets/imgs/logo.png"></a>
             <div class="wrap-input100 validate-input m-b-23" data-validate="Username is reauired">
-          <h2 align='center'>Email / Phone</h2>
+          <h2 align='center' style="color:#fff;">Email / Phone</h2>
          
             <ion-input class="login-form-control" name="username" type="text" placeholder="Type your username" [(ngModel)]="user"></ion-input>
            
@@ -94,9 +94,9 @@
           <div class="cng">
               <a href="#" class="profile-img-card"><img src="assets/imgs/logo.png"></a>
         
-            <h4 align='center'>Verification Code</h4>
+            <h4 align='center' style="color:#fff;">Verification Code</h4>
               <ion-input class="login-form-control" name="username" type="text" placeholder="Type your verification code" [(ngModel)]="verificationCode"></ion-input>
-            <h4 align='center'>New Password</h4>
+            <h4 align='center' style="color:#fff;">New Password</h4>
             <ion-input class="login-form-control" name="pass" type="password" placeholder="Type your password" [(ngModel)]="password"></ion-input>
           
               <form (ngSubmit)="signIn()" novalidate>
@@ -112,9 +112,9 @@
             <div class="cng">
                 <a href="#" class="profile-img-card"><img src="assets/imgs/logo.png"></a>
         
-                <h4 align='center'>Old Password</h4>
+                <h4 align='center' style="color:#fff;">Old Password</h4>
               <ion-input class="login-form-control" name="pass" type="password" placeholder="Type your password" [(ngModel)]="password"></ion-input>
-                <h4 align='center'>New Password</h4>
+                <h4 align='center' style="color:#fff;">New Password</h4>
               <ion-input class="login-form-control" name="pass" type="password" placeholder="Type your password" [(ngModel)]="newPassword"></ion-input>
                 <form (ngSubmit)="changePassword()" novalidate>
                   <button class="btn btn-primary btn-block btn-lg btn-signin">

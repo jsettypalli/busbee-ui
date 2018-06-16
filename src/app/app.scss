@@ -21,10 +21,27 @@
 $colors: (
   default: rgb(0, 255, 170)
   );
-
+.nav-top{
+  background-image:url(../../assets/imgs/bg-07.png);
+  background-position: right;
+  background-size: 100%;
+  background-repeat: no-repeat;
+  height:65px;
+  padding-top:10px;
+  margin-bottom: -10px;
+  margin-left:-20px;
+  z-index: 1;
+  width: 110%;
+}
+ion-toolbar{
+}
+.menu-sid{
+  margin-top: -20px;
+  //margin-bottom:-20px;
+}
 .bel{
-  margin-right:10px;
-  margin-top:10px;
+  margin-right:20px;
+  margin-top:-30px;
   font-size:35px;
   float:right;
 }
@@ -149,7 +166,7 @@ width:50px;
 
 .notifi {
 width: 100%;
-height: 38%;
+//height: 38%;
 display: block;
 background-color: #000000;position: absolute;
 bottom: 0%;
@@ -168,8 +185,8 @@ float: right;
 margin-top: -48px;
 }
 .client {
-width: 59px; 
-height:59px;
+width: 62px; 
+height:62px;
 border-top-left-radius: 0px;
 border-top-right-radius: 50px;
 border-bottom-right-radius: 50px;
@@ -177,18 +194,34 @@ border-bottom-left-radius: 50px;
 float: left;
 background-repeat:no-repeat;
 background-position: center;
-background-image: url(../images/client.jpg);
+background-image: url(../assets/imgs/profile-bg.png);
+background-size: 100%;
 margin-top: 8px;
 margin-left: 5px;
+}
+.client img{
+  border-radius: 50%;
+  width:80%;
+  margin-left: 5px;
+  margin-top: 5px;
+  //background-image: url(../assets/imgs/profile-bg.png);
+  
 }
 .details {
  width:70%;
 float: left;
 margin-top: 10px;
-padding-left: 17px;	    padding-bottom: 15px;
+padding-left: 13px;	    padding-bottom: 15px;
 }
 .details p{
-/*float:right;*/margin: 0px 0 0 0px;color:#fff;    font-size: 99%;
+/*float:right;*/margin: 0px 0 0 0px;color:#fff;     font-size:18px;
+}
+.details h6{
+  color: #fff;
+  float:right;
+  margin-top:0px;
+  margin-right:20px;
+  font-size: 18px;
 }
 .details span{
    width: 47%;
@@ -196,36 +229,46 @@ float: left;
 border: 0px solid #f00;
 }
 .details span p{
-margin:3;    font-size: 99%;
+margin:3;    font-size: 18px;
 color:#fff;    float: left;
 }
 .details b{
-color:#fea503;
+color:#ffed00;
 }
 .comments {
 color:#fff;width: 100%;float: left; border: 0px solid #baff07;
 }
 .comments p {
-  width: 53%;
+  width: 63%;
     float: left;
-    font-size: 99%;
-    margin: 4px 0 0 8px;
+    font-size: 17px;
+    margin: 5px 0 10px 20px;
     font-weight: bold;
 }
 .comments h1{
-color: #ffffff;
-margin: 1% 2px 0 9%;
+color: #ffd000;
+margin: -2% 2px 0 6%;
+font-size: 35px;
 float: left;
 font-weight: 600;
 }
+.comments h3{
+  margin-top: -65px;
+  float: right;
+  margin-right:-75px;
+  font-weight: bold;
+}
 
-.comments .minutes {margin-top: 15px;
+.comments .minutes {margin-top: 4px;
 float: left;
 font-size: 14px;}
 
+ion-menu{
+  width:280px;
+}
 
 .home {
-  background-image:url(../../assets/imgs/sub_d.jpg);
+  background-image:url(../../assets/imgs/bluebg.png);
   background-position: right;
   background-size: cover;
   background-repeat: no-repeat;
@@ -237,19 +280,50 @@ font-size: 14px;}
 p.home {padding:20px;}
 .border_btm {border-bottom: 1px solid #fff;}
 
-.scroll-content {background-color: #eb145b}
+.scroll-content {background-image: url(../assets/imgs/bluebg.png); 
+  background-repeat: no-repeat;
+  background-size: 120%;
+  background-position:bottom;
+}
 
-.item-md {background-color: #FEE88B; color:#eb145b;}
+.ion-home{border-top:2px solid #fff;}
+
+.item-md {border-bottom: 2px solid #fff; background-color: #006699; color:#fff;}
 
 ion-footer {bottom:-18px !important;}
 
 .menubranding {width: 81%;
-  height: 150px;
+  height: 160px;
   text-align: center;
   padding-top: 21px;
   padding-left: 58px;
+  margin-left: -20px;
+  margin-bottom: -20px;
+}
+
+.menubranding img{
+  border-radius: 50%;
+}
+.abt{
+  font-size: 14px;
+  color:#006699;
+  font-weight:bold;
+}
+.profile{
+  color:#fff;
+}
+.profile strong{
+  font-size: 20px;
+  line-height: 35px;
 }
 
 .list-md .item-block .item-inner {border:0px !important;}
 
 .toolbar-md-Oliver-base .bar-button-default-md, .toolbar-md-Oliver-base .bar-button-clear-md-default, .toolbar-md-Oliver-base .bar-button-md-default {color:#fff;}
+
+/*.driver_name{
+  float: left;
+  margin-top:10px;
+  color:#fff;
+  font-size: 18px;
+}*/

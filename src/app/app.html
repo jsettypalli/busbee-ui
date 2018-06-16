@@ -1,7 +1,9 @@
 <ion-menu [content]="content">
   <ion-header color="primary">
-    <ion-toolbar color="Oliver-base">
+    <ion-toolbar>
+      <div class="nav-top menu-sid">
       <ion-title>Menu</ion-title>
+    </div>
     </ion-toolbar>
   </ion-header>
 
@@ -13,10 +15,13 @@
         </button>
       </ng-container>
       <div class="home border_btm">
-          <div class="menubranding"> <img src="assets/imgs/logo1.png" width="50%" style="text-align: center"></div>
+          <div class="menubranding"> <img src="assets/imgs/logo1.png" width="50%" style="text-align: center;"></div>
       <button class="icon-left ion-home" menuClose ion-item detail-none (click)="openSettings()">
         <ion-icon name="settings"></ion-icon> Settings
       </button>
+      <button class="icon-left button button-assertive" menuClose ion-item detail-none (click)="openSettings()">
+          <ion-icon name="person"></ion-icon> About Us
+        </button>
       <button class="button button-assertive" menuClose ion-item detail-none (click)="logout()">
         <ion-icon name="log-out"></ion-icon>  Logout
       </button>
@@ -25,7 +30,10 @@
       </button>
     </div>
 
-    <p class="home"> Lorem ipusm. Lorem ipusm. Lorem ipusm. Lorem ipusm..</p> 
+    <p class="abt" style="width:80%; margin:0 auto; margin-top:20px;"> 
+        <ion-icon ios="ios-call" md="md-call"></ion-icon>  9133738855 <br/>
+      <ion-icon ios="ios-at" md="md-at"></ion-icon>  info@oliversearlylearning.com
+    </p>
     </ion-list>
     
   </ion-content>
@@ -35,14 +43,15 @@
 <!-- Disable swipe-to-go-back because it's poor UX to combine STGB with side menus -->
 <ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>
 <ion-header>
-  <ion-navbar color="Oliver-base" style="margin-top:-10px;">
-
+  <ion-navbar color="" style="margin-top:-10px; margin-bottom: 0px;" >
+<div class="nav-top">
     <button  ion-button menuToggle color="light" >
       <ion-icon style="zoom:1.5;"  name="menu" ></ion-icon>
     </button>
     <ion-icon name="ios-notifications" color="light" class="bel" (click)="message.show = true;"></ion-icon>
     <ion-icon name="ios-refresh-circle-outline" color="light" class="bel" *ngIf="!isBusMoving" (click)="getBusses()"></ion-icon>
     <ion-icon name="ios-locate-outline" color="light" class="bel" *ngIf="isBusMoving" (click)="locateBus()"></ion-icon>
+  </div>
   </ion-navbar>
 </ion-header>
 
@@ -54,16 +63,18 @@
   <div  *ngIf="message.show && message.text">
       <div class="user_push">
           <div class="close_n" (click)="message.show = false;"><img src="assets/imgs/close.png" alt=""></div>
-          <div class="client"> <img [src]="message.driver_thumbnail_url || 'assets/imgs/client.jpg'" *ngIf="message.driver_name">	</div>
+          <div class="client"> <img [src]="message.driver_thumbnail_url || 'assets/imgs/profile-pict.jpeg'" *ngIf="message.driver_name">
+            </div>
           <div class="details">
             <span>
-              <p *ngIf="message.driver_name">{{message.driver_name}}</p>
+                <p *ngIf="message.driver_name" class="driver_name">{{message.driver_name}}</p>
               <p> Route No: <b *ngIf="message.bus_number">{{message.bus_number}} </b></p>
             </span>
-            <p>Vehicle No: {{message.registration_number}} </p>
+            <h6>{{message.registration_number}} </h6>
           </div>
           <div class="comments">
             <p> {{message.short_message || message.text}} </p>
+            <!--<p><strong><h3>E T A</h3></strong></p>-->
             <h1 *ngIf="message.expected_time" > {{message.expected_time | date:'mm'}}</h1> <span class="minutes">mins</span>
             <h2 *ngIf="message.time" > {{message.time | date:'shortTime'}} </h2>
           </div>	
