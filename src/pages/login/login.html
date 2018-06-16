@@ -6,15 +6,15 @@
 -->
 <ion-header>
   <header>
-    <a href="#" class="profile-img-card"><img src="../../assets/imgs//logo.png"></a>
-  </header>
+     </header>
 </ion-header>
 
 <ion-content >
 
 
   <section class="login-card login" *ngIf="view === 'login'">
-    <h4  align='center'> Login </h4>
+    <a href="#" class="profile-img-card"><img src="assets/imgs/logo.png"></a>
+    <h4  align='center' style="margin-top:-20px; color:#fff; font-size:24px;"> Sign In </h4>
     <form class="form-signin"><span class="reauth-email"> </span>
 
         <ion-input color="Oliver-base" class="login-form-control" name="username" type="text" placeholder="Type your Email / Phone" [(ngModel)]="user"></ion-input>
@@ -71,13 +71,14 @@
 
     <div class="login-card" *ngIf="view === 'forgetPassword'">
         <!-- ForgetPassword Container -->
-
-        <div class="wrap-input100 validate-input m-b-23" data-validate="Username is reauired">
+        <div class="cng">
+            <a href="#" class="profile-img-card"><img src="assets/imgs/logo.png"></a>
+            <div class="wrap-input100 validate-input m-b-23" data-validate="Username is reauired">
           <h2 align='center'>Email / Phone</h2>
          
             <ion-input class="login-form-control" name="username" type="text" placeholder="Type your username" [(ngModel)]="user"></ion-input>
            
-          
+     
         </div>
         
             <form (ngSubmit)="forgetPassword()" novalidate>
@@ -85,11 +86,14 @@
             Send Verification Code
           </button>
             </form>
-          
+          </div>
       </div>
 
       <div class="login-card" *ngIf="view === 'verificationCode'">
           <!-- verificationCode Container -->
+          <div class="cng">
+              <a href="#" class="profile-img-card"><img src="assets/imgs/logo.png"></a>
+        
             <h4 align='center'>Verification Code</h4>
               <ion-input class="login-form-control" name="username" type="text" placeholder="Type your verification code" [(ngModel)]="verificationCode"></ion-input>
             <h4 align='center'>New Password</h4>
@@ -100,10 +104,14 @@
               Set New Password
             </button>
               </form>
+              </div>
         </div>
 
         <div class="login-card" *ngIf="view === 'changePassword'">
             <!-- changePassword Container -->
+            <div class="cng">
+                <a href="#" class="profile-img-card"><img src="assets/imgs/logo.png"></a>
+        
                 <h4 align='center'>Old Password</h4>
               <ion-input class="login-form-control" name="pass" type="password" placeholder="Type your password" [(ngModel)]="password"></ion-input>
                 <h4 align='center'>New Password</h4>
@@ -113,6 +121,7 @@
                 Set New Password
               </button>
                 </form>
+                </div>
           </div>
        
 
