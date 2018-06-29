@@ -6,10 +6,10 @@
 -->
 
 <ion-header>
-  
+
 	<header>
-    
-  
+
+
 	</header>
 
 </ion-header>
@@ -18,20 +18,20 @@
 
 <ion-content >
 
-  
-  
+
+
 <section class="login-card login" *ngIf="view === 'login'">
-      
+
 <a href="#" class="profile-img-card"><img src="../assets/imgs/square-logo-Text.png"></a>
-    
+
 <h4  align='center'>  </h4>
-    
+
 <form class="form-signin">
 <span class="reauth-email"> </span>
 
-        
+
 <ion-input color="Oliver-base" class="login-form-control" name="username" type="text" placeholder="@ Email / Phone" [(ngModel)]="user"></ion-input>
- 
+
        <ion-input color="Oliver-base" class="login-form-control" name="pass" type="password" placeholder="Password" [(ngModel)]="password"></ion-input>
 
 <br>
@@ -48,17 +48,17 @@
       <form (ngSubmit)="signIn()" novalidate>
 
       <button class="btn btn-primary btn-block btn-lg btn-signin" type="submit" >Log in</button>
- 
+
      </form>
- 
+
    </form>
 
- 
+
    <div  style="text-align: center">
-  
+
     <p class="pull-right">Powered by <a href="#">JS Technologies</a></p>
 
- 
+
    </div>
 
 
@@ -114,7 +114,7 @@
 
             <a href="#" class="profile-img-card"><img src="assets/imgs/logo.png"></a>
 
-        <div class="wrap-input100 validate-input m-b-23" data-validate="Username is reauired">
+        <div class="wrap-input100 validate-input m-b-23" data-validate="Username is required">
 
           <h2 align='center'>Email / Phone</h2>
 
@@ -156,7 +156,7 @@
             <ion-input class="login-form-control" name="pass" type="password" placeholder="Type your password" [(ngModel)]="password"></ion-input>
 
 
-              <form (ngSubmit)="signIn()" novalidate>
+              <form (ngSubmit)="confirmPassword()" novalidate>
 
                 <button class="btn btn-primary btn-block btn-lg btn-signin">
               Set New Password
@@ -192,7 +192,7 @@
               </button>
 
                 </form>
- 
+
              </div>
 
           </div>
