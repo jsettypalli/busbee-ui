@@ -12,7 +12,7 @@ import { CongnitoProvider } from '../congnito/congnito';
 export class ServerProvider {
 
   public map;
-  public url = 'http://52.66.155.37:8080';
+  private url = 'http://52.66.155.37:8080';
   public runningBusses = [];
 
   constructor(private http: HttpClient, private cognito: CongnitoProvider) {
