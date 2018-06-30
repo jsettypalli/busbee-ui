@@ -1,0 +1,38 @@
+/* login page */
+.login {
+  margin: 0 auto;
+  background: #557486;
+  height: 700px;
+}
+
+.login img {
+  margin: 0 auto;
+  margin-left: 30%;
+  width: 40%;
+}
+
+.login h1 {
+  margin-top: 50px;
+}
+
+.input {
+  float: left;
+  margin-left: 20%;
+}
+
+.login input {
+  margin: 0 auto;
+  margin-left: 40%;
+  margin-top: 50px;
+  width: 300px;
+  border: none;
+  border-bottom: 2px solid #37A8FB;
+  background: transparent;
+  color: #fff;
+}
+
+input::-webkit-input-placeholder {
+  color: #fff;
+}
+
+/*# sourceMappingURL=css/login.css.map */
