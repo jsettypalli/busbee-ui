@@ -6,8 +6,10 @@
 -->
 <ion-header>
 
-  <ion-navbar color="default" class="nav">
+  <ion-navbar color="BusBee-base" class="nav">
+      <ion-icon class="menu" ios="ios-menu" md="md-menu"></ion-icon>
     <ion-title style="text-align:center;" class="head"><strong>Settings</strong></ion-title>
+    <ion-icon class="bel" ios="ios-notifications" md="md-notifications"></ion-icon>
   </ion-navbar>
 
 </ion-header>
@@ -21,12 +23,13 @@
     <ion-item class="toggle tg" *ngFor="let item of notifications">
       <ion-label color="light" *ngIf="item.notificationMinutes">{{item.notificationMinutes}} minutes away</ion-label>
       <ion-label color="light" *ngIf="!item.notificationMinutes">On arrival</ion-label>
-      <ion-toggle [(ngModel)]="item.enabled" color="color-1" (ngModelChange)="saveSettings(item.notificationMinutes, item.enabled)"></ion-toggle>
+      <ion-toggle  [(ngModel)]="item.enabled" color="secondary" (ngModelChange)="saveSettings(item.notificationMinutes, item.enabled)"></ion-toggle>
+      
     </ion-item>
   </ion-list>
 
-
-  <button ion-button block (click)="close()" color="default">Close Settings</button>
+<br/><br/>
+  <button ion-button block class="save" (click)="close()" color="BusBee-secondary">Close</button>
 
 
 </ion-content>

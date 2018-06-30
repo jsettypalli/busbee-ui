@@ -1,31 +1,40 @@
 <ion-menu [content]="content">
   <ion-header color="primary">
-    <ion-toolbar color="Oliver-base">
+    <ion-toolbar color="BusBee-base">
       <ion-title>Menu</ion-title>
     </ion-toolbar>
   </ion-header>
 
-  <ion-content>
-    <ion-list >
+  <ion-content  color="Oliver-yellow">
+    <ion-list>
       <ng-container *ngIf="buses.length > 1">
         <button menuClose ion-item *ngFor="let bus of buses; index as i;" (click)="selectBus(i)">
           Bus #{{bus.busId}}
         </button>
       </ng-container>
       <div class="home border_btm">
-          <div class="menubranding"> <img src="assets/imgs/logo1.png" width="50%" style="text-align: center"></div>
+         
       <button class="icon-left ion-home" menuClose ion-item detail-none (click)="openSettings()">
         <ion-icon name="settings"></ion-icon> Settings
       </button>
+      <button class="icon-left" menuClose ion-item detail-none (click)="openSettings()">
+          <ion-icon name="person"></ion-icon> About Us
+        </button>
       <button class="button button-assertive" menuClose ion-item detail-none (click)="logout()">
         <ion-icon name="log-out"></ion-icon>  Logout
       </button>
       <button class="button button-assertive" menuClose ion-item detail-none (click)="changePassword()">
        <ion-icon name="create"></ion-icon> Change Password
       </button>
-    </div>
+      <div class="menubranding"> <img src="assets/imgs/square-logo-Text.png" width="80%" style="text-align: center"><br/>
+        <!-- <p class="profile"> <strong>Rajkumar S</strong><br/>F/o Oviya R<br/>IV STD E SEC, B Block<br/>Oliver Early Learning<br/>Chennai</p>-->
+        <span ><a href="tel:+919876543210"><ion-icon class="cal" ios="ios-call" md="md-call"> 9876543210</ion-icon></a><br/><a  href = "mailto: busbee@email.com"><ion-icon class="cal" ios="ios-mail" md="md-mail"> busbee@email.com</ion-icon></a></span>
+      </div>
+    
+        
+      </div>
 
-    <p class="home"> Lorem ipusm. Lorem ipusm. Lorem ipusm. Lorem ipusm..</p>
+   
     </ion-list>
 
   </ion-content>
@@ -35,11 +44,12 @@
 <!-- Disable swipe-to-go-back because it's poor UX to combine STGB with side menus -->
 <ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>
 <ion-header>
-  <ion-navbar color="Oliver-base">
+  <ion-navbar color="BusBee-base">
 
     <button  ion-button menuToggle color="light" >
       <ion-icon style="zoom:1.5;"  name="menu" ></ion-icon>
     </button>
+    <img src="assets/imgs/square-logo-Text.png" style="text-align: center; height: 40px; margin-left:32%;" width="12%">
     <ion-icon name="ios-notifications" color="light" class="bel" (click)="message.show = true;"></ion-icon>
     <ion-icon name="ios-refresh-circle-outline" color="light" class="bel" *ngIf="!isBusMoving" (click)="getBusses()"></ion-icon>
     <ion-icon name="ios-locate-outline" color="light" class="bel" *ngIf="isBusMoving" (click)="locateBus()"></ion-icon>
@@ -55,7 +65,7 @@
       <div class="user_push">
           <div class="close_n" (click)="message.show = false;"><img src="assets/imgs/close.png" alt=""></div>
           <div class="client" (click)="showDriverImage()"> <img [src]="message.driver_thumbnail_url || 'assets/imgs/client.jpg'" *ngIf="message.driver_name">	</div>
-          <div class="details">
+          <div class="details" *ngIf="message.driver_name">
             <span>
               <p *ngIf="message.driver_name">{{message.driver_name}}</p>
               <p *ngIf="message.bus_number"> Route No: <b>{{message.bus_number}} </b></p>

@@ -128,4 +128,76 @@ page-home {
   height:50px;
   width:50px;
 }
+.user{
+  background: rgb(255, 145, 0);
+  margin-left: 10px;
+  margin-top: 0px;
+  width:60px;
+  height: 60px;
+  border-top-right-radius: 50%;
+  border-bottom-left-radius: 50%;
+  border-bottom-right-radius: 50%;
+  float: left;
+  position: absolute;
+}
+.noti img{
+  height: 50px;
+  margin-left: 5px;
+  margin-top: 5px;
+  border-radius: 50%;
+}
+.noti{
+  background: #00476A;
+  height:145px;
+}
+.close{
+  margin-top: -40px;
+  margin-right:-10px;
+  background: #00476A;
+  float: right;
+  width:40px;
+  height:40px;
+  border-top-left-radius: 100%;
+}
+.upper{
+  height:80px;
+  float: left;
+  position: absolute;
+}
+.driver{
+ margin-left:100px;
+ margin-top:-10px;
+ color:#fff;
+ font-size: 16px;
+ position: absolute;
+}
+.driver strong{
+  color:rgb(255, 208, 0);
+}
+.vehicle{
+  margin-left:240px;
+  margin-top:20px;
+  color:#fff;
+  font-size: 16px;
+}
+.lower{
+  margin-top:70px;
+  position: absolute;
+}
+.msg{
+  margin-left: 20px;
+  margin-top: -20px;
+ 
+  width:50%;
+  position: absolute;
+}
+.time{
+  margin-left:250px;
+  margin-top: -30px;
+  font-size: 20px;
+  color:rgb(255, 208, 0);
+}
+.time strong{
+  font-size: 36px;
+}
   }

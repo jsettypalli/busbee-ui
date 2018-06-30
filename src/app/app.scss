@@ -223,33 +223,76 @@ font-weight: 600;
 float: left;
 font-size: 14px;}
 
+ion-menu{
+  width:280px;
+}
 
 .home {
-  background-image:url(assets/imgs/sub_d.jpg);
+  //background-image:url(../assets/imgs/sub-u.png);
   background-position: right;
   background-size: cover;
+  background-size: 138%;
   background-repeat: no-repeat;
   width:100%;
+  margin-top: 0px;
 
 
 }
 
 p.home {padding:20px;}
-.border_btm {border-bottom: 1px solid #fff;}
+.border_btm {border-bottom: 0px solid #fff;}
 
-.scroll-content {background-color: #eb145b}
+.scroll-content {
+  //background-image: url(../assets/imgs/bg-06.png); 
+  //background: #228086;
+  background-repeat: no-repeat;
+  background-size: 160%;
+  background-position:bottom;
+}
 
-.item-md {background-color: #FEE88B; color:#eb145b;}
+.ion-home{border-top:2px solid #fff;}
+
+.item-md {
+  border-bottom: 2px solid #fff; 
+  background-color: #228086; 
+  color:#FFF;
+}
 
 ion-footer {bottom:-18px !important;}
 
-.menubranding {width: 81%;
-  height: 150px;
-  text-align: center;
-  padding-top: 21px;
-  padding-left: 58px;
-}
+.menubranding {
+  width: 120%;
+  height:100%;
+  padding-bottom: 90%;
+  background:#005a61; 
+  background-size: 150%;
+  margin-left: -20px;
 
+}
+.menubranding span{
+  float:left;
+  margin-left: 5%;
+}
+.menubranding img{
+  width: 30%;
+  margin-left: 25%;
+  margin-top: 7%;
+  margin-bottom: 7%;
+}
+.profile{
+  color:#fff;
+}
+.profile strong{
+  font-size: 20px;
+  line-height: 35px;
+}
 .list-md .item-block .item-inner {border:0px !important;}
 
 .toolbar-md-Oliver-base .bar-button-default-md, .toolbar-md-Oliver-base .bar-button-clear-md-default, .toolbar-md-Oliver-base .bar-button-md-default {color:#fff;}
+.cal{
+  margin: 0 auto;
+  margin-top: 17px;
+  color: #fff;
+  font-size: 18px;
+  margin-left: 20px;
+}
