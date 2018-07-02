@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CongnitoProvider } from '../congnito/congnito';
+import { ConfigurationService } from '../../providers/configuration/configuration.service';
 
 /*
   Generated class for the ServerProvider provider.
@@ -12,7 +13,8 @@ import { CongnitoProvider } from '../congnito/congnito';
 export class ServerProvider {
 
   public map;
-  private url = 'http://52.66.155.37:8080';
+  private url = ConfigurationService.baseUrl;
+
   public runningBusses = [];
 
   constructor(private http: HttpClient, private cognito: CongnitoProvider) {

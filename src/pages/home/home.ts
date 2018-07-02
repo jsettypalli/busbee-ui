@@ -3,6 +3,7 @@ import { ServerProvider } from '../../providers/server/server';
 import { Geolocation } from '@ionic-native/geolocation';
 import { UtilsProvider } from '../../providers/utils/utils';
 import { MockDataProvider } from '../../providers/mock-data/mock-data';
+import { ConfigurationService } from '../../providers/configuration/configuration.service';
 
 import * as Stomp from 'stompjs';
 import * as SockJS from 'sockjs-client';
@@ -21,7 +22,7 @@ export class HomePage implements AfterViewInit, OnDestroy, OnInit {
   private locationWatch;
   private stompClient;
   private drivePath = [];
-  private serverUrl = 'http://52.66.155.37:8080/transportws';
+  private serverUrl = ConfigurationService.baseUrl + '/transportws';
   private wsConnected = false;
   private polylines = {
     current: [],
