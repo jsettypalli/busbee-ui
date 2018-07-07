@@ -1,0 +1,198 @@
+    /* ======== IMPORT FONT ========== */
+    
+    @import url(http://fonts.googleapis.com/css?family=Roboto:400,300,700,900);
+    @import url(http://fonts.googleapis.com/css?family=Raleway:900,300,700);
+    /* ======== BOOTSTRAP STYLE ========= */
+    /* ======== Google STYLE ========= */
+    
+    .profile-img-card {
+        //background-color: #eb145b;
+    }
+    
+    .login-card {
+        max-width: 375px;
+        height: 100px;
+        padding: 0px 20px;
+        // background-color: #eb145b;
+        margin: 0 auto;
+        //margin-bottom: 20px;
+        //margin-top: -60px;
+    }
+    
+    body {
+        //background-color: #eb145b;
+    }
+    
+    a.profile-img-card {
+        //background-size:100%;
+        display: block;
+        //background-image: url(../assets/imgs/bg-06.png);
+        background-repeat: no-repeat;
+        //height:800px;
+        z-index: -1;
+        width: 100%;
+        background-position-y: -20px;
+    }
+    
+    a.profile-img-card img {
+        height: 260px;
+        width: 95%;
+        margin: 0 auto;
+        margin-top: 1vh;
+    }
+    
+    .login-card {
+        // background-image: url(../assets/imgs/bg-06.png);
+        background-repeat: no-repeat;
+        background-size: 160%;
+        background-position: bottom;
+    }
+    
+    .cng {
+        margin: 0 auto;
+        padding-top: 0px;
+    }
+    
+    .cng a {
+        height: 300px;
+    }
+    
+    .login-card .reauth-email {
+        // display: block;
+        color: #404040;
+        line-height: 2;
+        margin-bottom: 10px;
+        font-size: 14px;
+        text-align: center;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        box-sizing: border-box;
+    }
+    
+    .login-form-control {
+        height: 38px;
+        padding: 6px 12px;
+        font-size: 16px !important;
+        line-height: 1.5 !important;
+        background-color: none;
+        background-image: none;
+        border-bottom: 1px solid #fff !important;
+        border-radius: 0px;
+    }
+    
+    .login-card .form-signin input[type=email],
+    .login-card .form-signin input[type=email]::placeholder,
+    .login-card .form-signin input[type=password],
+    .login-card .form-signin input[type=password]::placeholder,
+    .login-card .form-signin input[type=text],
+    .login-card .form-signin input[type=text]::placeholder,
+    .login-card .form-signin button {
+        height: 22px;
+        font-size: 16px;
+        width: 100%;
+        //display: block;
+        color: #fff !important;
+        margin-bottom: 14px;
+        z-index: 1;
+        // position: relative;
+        /*box-sizing: border-box;
+	border-bottom:1px solid #fff !important;*/
+    }
+    
+    .login-card label {
+        color: #fff;
+    }
+    
+    .login-card .form-signin .login-form-control:focus {
+        border-bottom: 1px solid #fff !important;
+    }
+    
+    .login-card .btn.btn-signin {
+        font-weight: 700;
+        height: 36px;
+        line-height: 36px;
+        font-size: 14px;
+        background: #eb145b;
+        color: rgb(255, 145, 2) !important;
+        border-radius: 50px;
+        border: 1px solid #fff;
+        transition: all 0.218s;
+        padding: 0;
+        margin: 34px 0 20px 0;
+    }
+    
+    .pull-right {
+        position: absolute;
+        /* margin-top: 10vh; */
+        /* margin-left: -22vh; */
+        bottom: 0;
+    }
+    
+    .pull-right a {
+        color: #fff !important;
+    }
+    
+    .login-card .btn.btn-signin:hover,
+    .login-card .btn.btn-signin:active,
+    .login-card .btn.btn-signin:focus {
+        color: #fff;
+        border-bottom: 1px solid #fff;
+    }
+    
+    .btn-signin {
+        font-size: 24px !important;
+        color: rgb(255, 174, 0) !important;
+    }
+    
+    .form-signin {
+        margin-top: -4vh;
+    }
+    
+    .form-signin a,
+    .form-signin a:hover {
+        color: #fff !important;
+        text-align: center;
+    }
+    
+    .login-card .forgot-password:hover,
+    .login-card .forgot-password:active,
+    .login-card .forgot-password:focus {
+        color: #fff !important;
+        border-bottom: 1px solid #fff;
+    }
+    
+    .login-form-control:focus {
+        /* border-color: #66afe9; */
+        outline: 0;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+    }
+    /*
+    FORM*/
+    
+    .login-form-control {
+        height: 40px;
+        padding: 3px 10px;
+        font-size: 16px;
+        line-height: 1.5;
+        color: #fff;
+        /*background-color: #000000;*/
+        background-image: none;
+    }
+    /* ======== GENERAL ========== */
+    
+    *,
+    *:hover,
+    *:focus,
+    *:active {
+        outline: 0;
+    }
+    
+    .text-input {
+        background: transparent !important;
+    }
+    
+    .btn {
+        width: 100% !important;
+    }

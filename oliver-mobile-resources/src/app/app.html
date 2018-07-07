@@ -1,0 +1,89 @@
+<ion-menu [content]="content">
+    <ion-header color="primary">
+        <ion-toolbar color="Oliver-base">
+            <ion-title>Menu</ion-title>
+        </ion-toolbar>
+    </ion-header>
+
+    <ion-content color="Oliver-yellow">
+        <ion-list>
+            <ng-container *ngIf="buses.length > 1">
+                <button menuClose ion-item *ngFor="let bus of buses; index as i;" (click)="selectBus(i)">
+          Bus #{{bus.busId}}
+        </button>
+            </ng-container>
+            <div class="home border_btm">
+                <div class="menubranding"> <img src="assets/imgs/logo1.png" width="60%" style="text-align: center">
+                    <!-- <p class="profile"> <strong>Rajkumar S</strong><br/>F/o Oviya R<br/>IV STD E SEC, B Block<br/>Oliver Early Learning<br/>Chennai</p>-->
+                </div>
+                <button class="icon-left ion-home" menuClose ion-item detail-none (click)="openSettings()">
+        <ion-icon name="settings"></ion-icon> Settings
+      </button>
+                <button class="icon-left" menuClose ion-item detail-none (click)="openSettings()">
+          <ion-icon name="person"></ion-icon> About Us
+        </button>
+                <button class="button button-assertive" menuClose ion-item detail-none (click)="logout()">
+        <ion-icon name="log-out"></ion-icon>  Logout
+      </button>
+                <button class="button button-assertive" menuClose ion-item detail-none (click)="changePassword()">
+       <ion-icon name="create"></ion-icon> Change Password
+      </button>
+            </div>
+            <div class="down-bg" style="background-image: url(../assets/imgs/bluebg.png);height: 40%;position: absolute;width: 100%;">
+                <p class="" style="position: absolute; width: 80%; margin: 0 auto; color: #fff; margin-top: 5vh; font-size: 14px; line-height: 2; left: 3vh;">
+                    <ion-icon ios="ios-call" md="md-call"></ion-icon> 9876543210<br/>
+                    <ion-icon ios="ios-at" md="md-at"></ion-icon> abc@email.com</p>
+            </div>
+
+        </ion-list>
+
+    </ion-content>
+
+</ion-menu>
+
+<!-- Disable swipe-to-go-back because it's poor UX to combine STGB with side menus -->
+<ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>
+<ion-header>
+    <ion-navbar color="Oliver-base">
+
+        <button ion-button menuToggle color="light">
+      <ion-icon style="zoom:1.5;"  name="menu" ></ion-icon>
+    </button>
+        <ion-icon name="ios-notifications" color="light" class="bel" (click)="message.show = true;"></ion-icon>
+        <ion-icon name="ios-refresh-circle-outline" color="light" class="bel" *ngIf="!isBusMoving" (click)="getBusses()"></ion-icon>
+        <ion-icon name="ios-locate-outline" color="light" class="bel" *ngIf="isBusMoving" (click)="locateBus()"></ion-icon>
+    </ion-navbar>
+</ion-header>
+
+<ion-content>
+    <page-home (notification)="onNotification($event)" (isBusMoving)="onBusMoving($event)"></page-home>
+</ion-content>
+
+<ion-footer>
+    <div *ngIf="message && message.show && (message.text || message.short_message)">
+        <div class="user_push">
+            <div class="close_n" (click)="message.show = false;"><img src="assets/imgs/close.png" alt=""></div>
+            <div class="client" (click)="showDriverImage()"> <img [src]="message.driver_thumbnail_url || 'assets/imgs/client.jpg'" *ngIf="message.driver_name"> </div>
+            <div class="details" *ngIf="message.driver_name">
+                <span>
+              <p *ngIf="message.driver_name">{{message.driver_name}}</p>
+              <p *ngIf="message.bus_number"> Route No: <b>{{message.bus_number}} </b></p>
+            </span>
+                <p *ngIf="message.registration_number">Vehicle No: {{message.registration_number}} </p>
+            </div>
+            <div class="comments">
+                <p> {{message.short_message || message.text}} </p>
+                <h1 *ngIf="message.expected_time"> {{message.expected_time}}</h1> <span class="minutes" *ngIf="message.expected_time">mins</span>
+                <h2 *ngIf="message.time"> {{message.time | date:'shortTime'}} </h2>
+            </div>
+        </div>
+    </div>
+</ion-footer>
+
+<ion-fab right bottom *ngIf="role === 'DRIVER'">
+    <button ion-fab color="default"><ion-icon name="arrow-dropleft"></ion-icon></button>
+    <ion-fab-list side="left">
+        <button ion-fab *ngIf="!mockData.useMockData"><ion-icon name="ios-navigate-outline" (click)="mockDriver()"></ion-icon></button>
+        <button ion-fab *ngIf="mockData.useMockData"><ion-icon name="ios-eye-off-outline" (click)="stopMock()"></ion-icon></button>
+    </ion-fab-list>
+</ion-fab>

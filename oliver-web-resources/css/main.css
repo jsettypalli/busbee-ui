@@ -1,0 +1,285 @@
+body {
+  margin: 0 auto !important;
+}
+
+/* Header */
+ul.breadcrumb {
+  padding: 10px 16px;
+  list-style: none;
+  padding-left: 3%;
+  background-color: #eee;
+  border-bottom: 1px solid #0275d8;
+  transition: 0.5s;
+  border-radius: 0;
+}
+
+ul.breadcrumb li {
+  display: inline;
+  font-size: 16px;
+}
+
+ul.breadcrumb li + li:before {
+  padding: 8px;
+  color: black;
+}
+
+ul.breadcrumb li a {
+  color: #0275d8;
+  text-decoration: none;
+}
+
+ul.breadcrumb li a:hover {
+  color: #01447e;
+  text-decoration: underline;
+}
+
+ul.breadcrumb li i {
+  padding: 0 30%;
+  font-size: 16px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+}
+
+ul.breadcrumb li span {
+  font-size: 150%;
+  font-weight: 700;
+  line-height: 0.9;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.header {
+  height: 80px;
+  background: #eb145b;
+}
+
+.header img {
+  margin: 0 auto;
+  float: left;
+  width: 7%;
+  margin-left: 10px;
+}
+
+.header span {
+  float: left;
+  margin-top: 3% !important;
+}
+
+.header a {
+  float: right;
+  margin-top: 14%;
+  font-size: 166%;
+  color: #fff;
+  font-weight: bold;
+}
+
+.header a:hover {
+  color: #00C0FF;
+  text-decoration: none;
+}
+
+.top-right {
+  margin-left: 87%;
+  width: 10%;
+}
+
+.top-right .bell {
+  /* float: left; */
+  font-size: 150%;
+  color: #fff;
+  margin-top: 20%;
+  margin-left: 20%;
+}
+
+.top-right .user {
+  /* float: left; */
+  font-size: 150%;
+  color: #fff;
+  margin-top: 20%;
+  margin-left: 0%;
+}
+
+.top-right .bell:hover {
+  color: #00C0FF;
+  text-decoration: none;
+}
+
+.top-right .user:hover {
+  color: #00C0FF;
+  text-decoration: none;
+}
+
+/* Footer */
+footer {
+  float: left;
+  height: 8%;
+  background: #14a3eb;
+}
+
+footer label {
+  float: right;
+  font-size: 120%;
+}
+
+footer strong {
+  color: #fff;
+}
+
+/* Side Menu */
+.left-panel {
+  height: 100%;
+  width: 0;
+  float: left;
+  margin-left: -1.2%;
+  background: #14a3eb;
+  top: 0;
+  left: 0;
+  overflow-x: hidden;
+  transition: 0.5s;
+}
+
+.logo-left {
+  float: left;
+  width: 98%;
+  margin-left: 0%;
+  margin-top: 10%;
+  transition: 0.05s;
+}
+
+.logo-left a {
+  width: 90%;
+  height: 5%;
+  float: left;
+  margin-top: 10%;
+  margin-left: 8%;
+  color: #fff;
+  display: block;
+  transition: 0.3s;
+  border-bottom: 1px solid #fff;
+}
+
+.logo-left a:hover {
+  color: #0088cc;
+  text-decoration: none;
+}
+
+/* content */
+.routh {
+  float: left;
+  height: 50% !important;
+  width: 38%;
+  margin-left: 5%;
+  margin-top: 1%;
+  transition: 0.5s;
+  z-index: 1000;
+}
+
+.routh2, .routh4 {
+  margin-left: 13%;
+}
+
+.routh3, .routh4 {
+  margin-top: 5%;
+}
+
+.routh1, .routh3 {
+  margin-left: 2%;
+}
+
+.content {
+  float: right;
+  width: 100%;
+  height: 900px;
+  background: #eee;
+  background-size: 132% 110%;
+}
+
+.content h2 {
+  color: #0088cc;
+  margin-top: 0%;
+  text-align: left;
+  padding-left: 3%;
+  transition: 0.5s;
+  font-family: Roboto, "Open Sans";
+  font-weight: 400;
+  font-size: 170%;
+}
+
+.h {
+  float: left;
+  margin-left: 0;
+  width: 120%;
+  background: #fff;
+  margin-bottom: 5px;
+  box-shadow: 1.5px 1.5px 5px 1px #aaa;
+  z-index: 1000;
+}
+
+.h label {
+  margin-left: 5%;
+  font-size: 100%;
+  font-weight: bold;
+  color: #08c;
+}
+
+.h select {
+  width: 45%;
+  height: 12%;
+  margin-top: 1%;
+  margin-bottom: 2%;
+  margin-left: 5%;
+  border: 0px solid grey;
+  border-bottom: 2px solid #28a745;
+  color: #000;
+  font-size: 100%;
+}
+
+.h p {
+  color: #00C0FF;
+  font-size: 100%;
+}
+
+.map {
+  background-size: 100%;
+  margin-left: 0px;
+  margin-top: 10%;
+  height: 280px;
+  width: 120%;
+  box-shadow: 1.5px 1.5px 5px 1px #aaa;
+  z-index: 1000;
+}
+
+.mapouter {
+  text-align: right;
+  height: 100%;
+  width: 100%;
+}
+
+.gmap_canvas {
+  overflow: hidden;
+  background: none !important;
+  height: 100%;
+  width: 100%;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #aaa;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #003b58;
+  border-radius: 1px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #025680;
+}
+
+/*# sourceMappingURL=main.css.map */

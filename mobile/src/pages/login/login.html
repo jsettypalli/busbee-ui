@@ -1,0 +1,207 @@
+<!--
+  Generated template for the LoginPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+
+<ion-header>
+
+    <header>
+
+
+    </header>
+
+</ion-header>
+
+
+
+<ion-content>
+
+
+
+    <section class="login-card login" *ngIf="view === 'login'">
+
+        <a href="#" class="profile-img-card"><img src="assets/imgs/logo.png"></a>
+
+        <h4 align='center'> </h4>
+
+        <form class="form-signin">
+            <span class="reauth-email"> </span>
+
+
+            <ion-input color="Oliver-base" class="login-form-control" name="username" type="text" placeholder="@ Email / Phone" [(ngModel)]="user"></ion-input>
+
+            <ion-input color="Oliver-base" class="login-form-control" name="pass" type="password" placeholder="Password" [(ngModel)]="password"></ion-input>
+
+            <br>
+
+
+            <div align='center'>
+
+                <a href="#forgotPassword" (click)="view = 'forgetPassword'">
+            Forgot password?
+          </a>
+
+            </div>
+
+            <form (ngSubmit)="signIn()" novalidate>
+
+                <button class="btn btn-primary btn-block btn-lg btn-signin" type="submit">Log in</button>
+
+            </form>
+            <div style="text-align: center">
+
+                <p class="pull-right">Powered by <a href="#">JS Technologies</a></p>
+
+
+            </div>
+
+        </form>
+
+
+
+
+
+
+    </section>
+
+
+
+    <div class="login-card" *ngIf="view === 'newPassword'">
+
+        <!-- newPassword Container -->
+
+        <span class="label-input100 lab" style="color:rgb(0, 0, 0); font-family:roboto;">You are logging in for the first time. You need to change your password</span>
+
+
+
+
+        <ion-input class="login-form-control" name="pass" type="password" placeholder="Type your password" [(ngModel)]="newPassword"></ion-input>
+
+
+        <br/>
+
+
+        <div class="container-login100-form-btn">
+
+
+
+
+            <form (ngSubmit)="setnewPassword()" novalidate>
+
+                <button class="btn btn-primary btn-block btn-lg btn-signin">
+          Set Password
+        </button>
+
+                <button class="login100-form-btn ">
+          Back
+        </button>
+
+            </form>
+
+
+        </div>
+
+    </div>
+
+
+
+    <div class="login-card" *ngIf="view === 'forgetPassword'">
+
+        <!-- ForgetPassword Container -->
+
+        <div class="cng">
+
+            <a href="#" class="profile-img-card"><img src="assets/imgs/logo.png"></a>
+
+            <div class="wrap-input100 validate-input m-b-23" data-validate="Username is reauired">
+
+                <h2 align='center'>Email / Phone</h2>
+
+
+                <ion-input class="login-form-control" name="username" type="text" placeholder="Type your username" [(ngModel)]="user"></ion-input>
+
+
+            </div>
+
+        </div>
+
+
+        <form (ngSubmit)="forgetPassword()" novalidate>
+
+            <button class="btn btn-primary btn-block btn-lg btn-signin">
+            Send Verification Code
+          </button>
+
+        </form>
+
+
+    </div>
+
+
+    <div class="login-card" *ngIf="view === 'verificationCode'">
+
+        <!-- verificationCode Container -->
+
+        <div class="cng">
+
+            <a href="#" class="profile-img-card"><img src="assets/imgs/logo.png"></a>
+
+            <h4 align='center'>Verification Code</h4>
+
+            <ion-input class="login-form-control" name="username" type="text" placeholder="Type your verification code" [(ngModel)]="verificationCode"></ion-input>
+
+            <h4 align='center'>New Password</h4>
+
+            <ion-input class="login-form-control" name="pass" type="password" placeholder="Type your password" [(ngModel)]="password"></ion-input>
+
+
+            <form (ngSubmit)="signIn()" novalidate>
+
+                <button class="btn btn-primary btn-block btn-lg btn-signin">
+              Set New Password
+            </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <div class="login-card" *ngIf="view === 'changePassword'">
+
+        <!-- changePassword Container -->
+
+        <div class="cng">
+
+            <a href="#" class="profile-img-card"><img src="assets/imgs/logo.png"></a>
+
+            <h4 align='center'>Old Password</h4>
+
+            <ion-input class="login-form-control" name="pass" type="password" placeholder="Type your password" [(ngModel)]="password"></ion-input>
+
+            <h4 align='center'>New Password</h4>
+
+            <ion-input class="login-form-control" name="pass" type="password" placeholder="Type your password" [(ngModel)]="newPassword"></ion-input>
+
+            <form (ngSubmit)="changePassword()" novalidate>
+
+                <button class="btn btn-primary btn-block btn-lg btn-signin">
+                Set New Password
+              </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+
+
+
+
+
+</ion-content>
